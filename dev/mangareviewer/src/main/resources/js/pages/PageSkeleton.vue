@@ -4,16 +4,14 @@
       <v-app-bar-title>Reviewer</v-app-bar-title>
       <v-spacer></v-spacer>
 
-      <v-btn icon>
+      <v-btn href="/" icon>
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
 
       <v-divider vertical inset></v-divider>
 
       <login-dialog></login-dialog>
-      <v-btn>
-        Register
-      </v-btn>
+      <register-dialog></register-dialog>
     </v-app-bar>
 
     <v-main class="my-4">
@@ -35,9 +33,11 @@
 
 <script>
 import LoginDialog from "components/auth/LoginDialog.vue";
+import RegisterDialog from "components/auth/RegisterDialog.vue";
+
 
 export default {
-  components: {LoginDialog},
+  components: {LoginDialog, RegisterDialog},
 }
 </script>
 

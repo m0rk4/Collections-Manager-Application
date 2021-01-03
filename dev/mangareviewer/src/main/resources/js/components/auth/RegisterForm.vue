@@ -1,7 +1,7 @@
 <template>
   <v-card max-width="600px">
     <v-toolbar flat>
-      <v-toolbar-title>Login</v-toolbar-title>
+      <v-toolbar-title>Registration</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="isDialog" icon @click="onClick">
         <v-icon>mdi-close</v-icon>
@@ -13,7 +13,12 @@
         <v-form ref="form">
 
           <v-text-field
-              label="Login or E-mail"
+              label="E-mail"
+              required
+          ></v-text-field>
+
+          <v-text-field
+              label="Login"
               required
           ></v-text-field>
 
@@ -22,8 +27,13 @@
               required
           ></v-text-field>
 
+          <v-text-field
+              label="Repeat Password"
+              required
+          ></v-text-field>
+
           <v-btn block class="mt-1 mb-4">
-            Enter
+            Register
           </v-btn>
 
           <social-links></social-links>
@@ -31,7 +41,7 @@
         </v-form>
 
         <v-row class="justify-center mt-4">
-          <v-btn @click="showRegisterPage">Register</v-btn>
+          <v-btn @click="showLoginPage">Login</v-btn>
         </v-row>
 
       </v-container>
@@ -45,14 +55,17 @@ import SocialLinks from "components/auth/SocialLinks.vue";
 export default {
   components: {SocialLinks},
   props: ['isDialog', 'onClose'],
+  data() {
+    return {}
+  },
   methods: {
     onClick() {
       this.onClose();
     },
-    showRegisterPage() {
+    showLoginPage() {
       if (this.onClose)
         this.onClose();
-      this.$router.push("/register")
+      this.$router.push("/login");
     }
   }
 }

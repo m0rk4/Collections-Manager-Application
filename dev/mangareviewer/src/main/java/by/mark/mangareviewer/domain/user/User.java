@@ -1,11 +1,16 @@
 package by.mark.mangareviewer.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -18,10 +23,19 @@ public class User implements UserDetails, Serializable {
     @Id
     private String id;
 
+    @NotBlank
+    @Size(min = 2, max = 30)
     private String name;
+
+    @NotBlank
+    @Size(min=5, max=30)
     private String password;
+
     private boolean nonLocked;
     private String userpic;
+
+    @NotBlank
+    @Email
     private String email;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

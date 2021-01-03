@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MainPage from "pages/MainPage.vue"
 import UserPage from "pages/UserPage.vue";
-import RegisterPage from "pages/RegisterPage.vue";
+import RegisterPage from "pages/auth/RegisterPage.vue";
 import LoginPage from "pages/auth/LoginPage.vue";
 import NotFoundPage from "pages/NotFoundPage.vue";
 

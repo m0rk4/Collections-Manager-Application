@@ -3,7 +3,7 @@
       v-model="login"
       max-width="450px">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn text v-bind="attrs" v-on="on">
+      <v-btn class="mx-2" text v-bind="attrs" v-on="on">
         Login
       </v-btn>
     </template>

@@ -10,19 +10,21 @@
     <v-divider></v-divider>
     <v-card-text>
       <v-container>
-        <v-form ref="form">
+        <v-form ref="loginForm">
 
           <v-text-field
+              v-model="username"
               label="Login or E-mail"
               required
           ></v-text-field>
 
           <v-text-field
+              v-model="password"
               label="Password"
               required
           ></v-text-field>
 
-          <v-btn block class="mt-1 mb-4">
+          <v-btn @click="login" block class="mt-1 mb-4">
             Enter
           </v-btn>
 
@@ -41,10 +43,17 @@
 
 <script>
 import SocialLinks from "components/auth/SocialLinks.vue";
+import authApi from "api/authApi";
 
 export default {
   components: {SocialLinks},
   props: ['isDialog', 'onClose'],
+  data() {
+    return {
+      username: '',
+      password: ''
+    }
+  },
   methods: {
     onClick() {
       this.onClose();
@@ -53,6 +62,11 @@ export default {
       if (this.onClose)
         this.onClose();
       this.$router.push("/register")
+    },
+    login() {
+      authApi.login(this.username, this.password).then(res => {
+        console.log(res)
+      })
     }
   }
 }

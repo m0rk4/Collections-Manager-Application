@@ -35,7 +35,6 @@
 import LoginDialog from "components/auth/LoginDialog.vue";
 import RegisterDialog from "components/auth/RegisterDialog.vue";
 
-
 export default {
   components: {LoginDialog, RegisterDialog},
 }

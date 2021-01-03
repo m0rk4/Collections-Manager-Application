@@ -1,6 +1,5 @@
 package by.mark.mangareviewer.controller;
 
-import by.mark.mangareviewer.domain.user.User;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -17,5 +16,6 @@ public class MainController {
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return "index";
     }
+
 
 }

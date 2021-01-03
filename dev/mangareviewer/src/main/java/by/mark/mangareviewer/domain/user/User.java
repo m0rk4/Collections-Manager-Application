@@ -23,19 +23,15 @@ public class User implements UserDetails, Serializable {
     @Id
     private String id;
 
-    @NotBlank
-    @Size(min = 2, max = 30)
     private String name;
 
-    @NotBlank
-    @Size(min=5, max=30)
+
     private String password;
 
     private boolean nonLocked;
     private String userpic;
 
-    @NotBlank
-    @Email
+
     private String email;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

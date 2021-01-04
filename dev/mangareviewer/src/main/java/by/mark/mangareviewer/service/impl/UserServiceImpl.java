@@ -5,24 +5,25 @@ import by.mark.mangareviewer.domain.user.User;
 import by.mark.mangareviewer.repo.UserDetailsRepo;
 import by.mark.mangareviewer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserDetailsRepo userDetailsRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDetailsRepo userDetailsRepo) {
+    public UserServiceImpl(UserDetailsRepo userDetailsRepo, PasswordEncoder passwordEncoder) {
         this.userDetailsRepo = userDetailsRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -31,18 +32,19 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             user = userDetailsRepo.findByEmail(username);
             if (user == null)
-                return null;
+                throw new UsernameNotFoundException("User with such login or email do not exists");
         }
         if (user.getPassword() == null)
-            return null;
+            throw new UsernameNotFoundException("User with such login or email do not exists");
         return user;
     }
 
     @Override
-    public User updateOAuth2User(Map<String, Object> attributes) {
+    public User updateOAuth2User(Map<String, Object> attributes, Set<GrantedAuthority> authorities) {
         String id = attributes.get("id") instanceof String ?
                 (String) attributes.get("id") : String.valueOf(attributes.get("id"));
         User user = userDetailsRepo.findById(id).orElseGet(() -> createOAuth2User(id, attributes));
+        authorities.addAll(user.getAuthorities());
         user.setLastVisit(LocalDateTime.now());
         return userDetailsRepo.save(user);
     }
@@ -52,6 +54,7 @@ public class UserServiceImpl implements UserService {
         User userFromDbLogin = userDetailsRepo.findByName(user.getName());
         if (userFromDbLogin != null)
             return false;
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setId(UUID.randomUUID().toString());
         user.setRoles(Collections.singleton(Role.USER));
         user.setNonLocked(true);

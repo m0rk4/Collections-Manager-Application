@@ -25,14 +25,10 @@ public class MyCustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UserDetails userDetails = userService.loadUserByUsername(authentication.getName());
-        if (userDetails != null) {
-            if (authentication.getCredentials().equals(userDetails.getPassword())) {
-                return getUsernamePasswordAuthenticationToken(authentication, userDetails);
-            } else {
-                throw new BadCredentialsException("Incorrect Password");
-            }
+        if (authentication.getCredentials().equals(userDetails.getPassword())) {
+            return getUsernamePasswordAuthenticationToken(authentication, userDetails);
         } else {
-            throw new UsernameNotFoundException("User with such login or email do not exists");
+            throw new BadCredentialsException("Incorrect Password");
         }
     }
 

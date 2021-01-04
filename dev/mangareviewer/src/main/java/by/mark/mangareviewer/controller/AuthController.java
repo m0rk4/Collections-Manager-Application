@@ -68,7 +68,7 @@ public class AuthController {
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/");
-            return new ResponseEntity<String>(headers,HttpStatus.FOUND);
+            return new ResponseEntity<String>(headers, HttpStatus.FOUND);
         } catch (AuthenticationException exception) {
             return new ResponseEntity<>(ControllerUtils.getMessageError(exception.getMessage()), HttpStatus.OK);
         }

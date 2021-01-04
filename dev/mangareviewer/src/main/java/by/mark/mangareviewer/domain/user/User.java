@@ -29,6 +29,7 @@ public class User implements UserDetails, Serializable {
     private String password;
 
     private boolean nonLocked;
+
     private String userpic;
 
 

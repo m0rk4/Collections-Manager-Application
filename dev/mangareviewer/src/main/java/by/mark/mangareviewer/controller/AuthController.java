@@ -1,18 +1,28 @@
 package by.mark.mangareviewer.controller;
 
+
 import by.mark.mangareviewer.dto.UserDto;
 import by.mark.mangareviewer.service.UserService;
 import by.mark.mangareviewer.util.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +31,15 @@ import java.util.Map;
 public class AuthController {
 
     private final UserService userService;
+    private final AuthenticationProvider authenticationProvider;
 
     @Autowired
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, AuthenticationProvider authenticationProvider) {
         this.userService = userService;
+        this.authenticationProvider = authenticationProvider;
     }
 
-    @PostMapping("register")
+    @PostMapping("signup")
     public ResponseEntity registerUser(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return new ResponseEntity(
@@ -41,6 +53,25 @@ public class AuthController {
                 new ResponseEntity(
                         ControllerUtils.getDefaultAuthErrorMessage(),
                         HttpStatus.OK);
+    }
+
+    @PostMapping("signin")
+    public ResponseEntity<?> login(@RequestBody Map<String, Object> body, HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(body.get("username"), body.get("password"));
+        token.setDetails(new WebAuthenticationDetails(request));
+        try {
+            Authentication auth = authenticationProvider.authenticate(token);
+            SecurityContext sc = SecurityContextHolder.getContext();
+            sc.setAuthentication(auth);
+            HttpSession session = request.getSession(true);
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", "/");
+            return new ResponseEntity<String>(headers,HttpStatus.FOUND);
+        } catch (AuthenticationException exception) {
+            return new ResponseEntity<>(ControllerUtils.getMessageError(exception.getMessage()), HttpStatus.OK);
+        }
     }
 
 }

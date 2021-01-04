@@ -21,6 +21,9 @@
           <v-text-field
               v-model="password"
               label="Password"
+              :append-icon="showPL ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="showPL ? 'text' : 'password'"
+              @click:append="showPL = !showPL"
               required
           ></v-text-field>
 
@@ -50,6 +53,7 @@ export default {
   props: ['isDialog', 'onClose'],
   data() {
     return {
+      showPL: false,
       username: '',
       password: ''
     }
@@ -57,6 +61,7 @@ export default {
   methods: {
     onClick() {
       this.onClose();
+      this.$refs.loginForm.reset()
     },
     showRegisterPage() {
       if (this.onClose)
@@ -65,7 +70,14 @@ export default {
     },
     login() {
       authApi.login(this.username, this.password).then(res => {
-        console.log(res)
+        if (res.body.message) {
+          console.log(res.body.message)
+        } else {
+          if (this.isDialog)
+            this.onClick();
+          if (this.$router.currentRoute.path !== '/')
+            this.$router.push('/')
+        }
       })
     }
   }

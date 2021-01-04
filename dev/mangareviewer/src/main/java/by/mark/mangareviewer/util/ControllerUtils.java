@@ -20,8 +20,18 @@ public class ControllerUtils {
     }
 
     public static Map<Object,Object> getDefaultAuthErrorMessage() {
+        return getMessage(DUP_MESSAGE);
+    }
+
+    public static Map<Object,Object> getMessageError(String message) {
+       return getMessage(message);
+    }
+
+    private static Map<Object,Object> getMessage(String message) {
         Map<Object, Object> response = new HashMap<>();
-        response.put("message", DUP_MESSAGE);
+        response.put("message", message);
         return response;
     }
+
+
 }

@@ -31,10 +31,10 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             user = userDetailsRepo.findByEmail(username);
             if (user == null)
-                throw new UsernameNotFoundException("User not found");
+                return null;
         }
         if (user.getPassword() == null)
-            throw new UsernameNotFoundException("User not found");
+            return null;
         return user;
     }
 

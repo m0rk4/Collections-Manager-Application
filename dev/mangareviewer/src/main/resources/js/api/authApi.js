@@ -6,6 +6,4 @@ export default {
         Vue.http.post('/signup', {name: login, password: pass, email: email}),
     login: (username, pass) =>
         Vue.http.post('/signin', {username: username, password: pass}),
-    main: () =>
-        Vue.http.get('/')
 }

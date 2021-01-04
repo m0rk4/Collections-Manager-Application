@@ -107,9 +107,10 @@ export default {
       if (!this.$refs.registerForm.validate()) return
       authApi.register(this.email, this.login, this.pass).then(res => {
         if (res.body.message) {
-          console.log(res.body.message)
+          this.$store.dispatch('alert/activateAlertAction', {message: res.body.message, type: 'success'})
         } else {
-          this.$router.push("/login");
+          this.$router.push("/login")
+          this.$store.dispatch('alert/activateAlertAction', {message: 'Successfully registered', type: 'error'})
         }
       })
       this.$refs.registerForm.reset()

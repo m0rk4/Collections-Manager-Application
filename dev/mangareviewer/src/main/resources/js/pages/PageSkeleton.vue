@@ -14,11 +14,22 @@
       <register-dialog></register-dialog>
     </v-app-bar>
 
+
     <v-main class="my-4">
       <v-container>
         <router-view></router-view>
       </v-container>
     </v-main>
+
+    <v-alert class="ml-auto mr-4"
+             dismissible
+             dense
+             :type="typeAlert"
+             :value="visibilityAlert"
+             transition="scale-transition"
+    >
+      {{ messageAlert }}
+    </v-alert>
 
     <v-footer padless>
       <v-col
@@ -34,9 +45,17 @@
 <script>
 import LoginDialog from "components/auth/LoginDialog.vue";
 import RegisterDialog from "components/auth/RegisterDialog.vue";
+import {mapState} from 'vuex'
 
 export default {
   components: {LoginDialog, RegisterDialog},
+  computed: {
+    ...mapState({
+      messageAlert: state => state.alert.message,
+      typeAlert: state => state.alert.type,
+      visibilityAlert: state => state.alert.isVisible,
+    })
+  }
 }
 </script>
 

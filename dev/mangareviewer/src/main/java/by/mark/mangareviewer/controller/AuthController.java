@@ -1,11 +1,11 @@
 package by.mark.mangareviewer.controller;
 
 
-import by.mark.mangareviewer.dto.UserDto;
+import by.mark.mangareviewer.dto.LoginFormDto;
+import by.mark.mangareviewer.dto.RegistrationFormDto;
 import by.mark.mangareviewer.service.UserService;
 import by.mark.mangareviewer.util.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Map;
 
 @RestController
 public class AuthController {
@@ -39,25 +38,29 @@ public class AuthController {
     }
 
     @PostMapping("signup")
-    public ResponseEntity registerUser(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
+    public ResponseEntity<?> registerUser(
+            @RequestBody @Valid RegistrationFormDto userDto,
+            BindingResult bindingResult
+    ) {
         if (bindingResult.hasErrors())
-            return new ResponseEntity(
+            return new ResponseEntity<>(
                     ControllerUtils.getValidationErrors(bindingResult),
                     HttpStatus.OK);
 
-        return userService.addNewUser(userDto.toUser()) ?
-                new ResponseEntity(
+        return userService.addNewUser(userDto.toUser())
+                ?
+                new ResponseEntity<>(
                         HttpStatus.OK)
                 :
-                new ResponseEntity(
+                new ResponseEntity<>(
                         ControllerUtils.getDefaultAuthErrorMessage(),
                         HttpStatus.OK);
     }
 
     @PostMapping("signin")
-    public ResponseEntity<?> login(@RequestBody Map<String, Object> body, HttpServletRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginFormDto loginFormDto, HttpServletRequest request) {
         UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(body.get("username"), body.get("password"));
+                new UsernamePasswordAuthenticationToken(loginFormDto.getUsername(), loginFormDto.getPassword());
         token.setDetails(new WebAuthenticationDetails(request));
         try {
             Authentication auth = authenticationProvider.authenticate(token);
@@ -65,9 +68,7 @@ public class AuthController {
             sc.setAuthentication(auth);
             HttpSession session = request.getSession(true);
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Location", "/");
-            return new ResponseEntity<String>(headers, HttpStatus.FOUND);
+            return new ResponseEntity<String>(HttpStatus.OK);
         } catch (AuthenticationException exception) {
             return new ResponseEntity<>(ControllerUtils.getMessageError(exception.getMessage()), HttpStatus.OK);
         }

@@ -5,6 +5,7 @@ import UserPage from "pages/UserPage.vue";
 import RegisterPage from "pages/auth/RegisterPage.vue";
 import LoginPage from "pages/auth/LoginPage.vue";
 import NotFoundPage from "pages/NotFoundPage.vue";
+import AdminPage from "pages/AdminPage.vue";
 
 Vue.use(VueRouter)
 
@@ -12,7 +13,8 @@ const routes = [
     {path: '/', component: MainPage},
     {path: '/login', component: LoginPage},
     {path: '/register', component: RegisterPage},
-    {path: '/user/:id', component: UserPage},
+    {path: '/user/:id?', component: UserPage},
+    {path: '/admin', component: AdminPage},
     {path: '/*', component: NotFoundPage}
 ]
 

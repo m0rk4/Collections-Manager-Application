@@ -25,7 +25,11 @@ public class MyCustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UserDetails userDetails = userService.loadUserByUsername(authentication.getName());
         if (authentication.getCredentials().equals(userDetails.getPassword())) {
-            return getUsernamePasswordAuthenticationToken(authentication, userDetails);
+            if (userDetails.isAccountNonLocked()) {
+                return getUsernamePasswordAuthenticationToken(authentication, userDetails);
+            } else {
+                throw new BadCredentialsException("Your account is locked by admin");
+            }
         } else {
             throw new BadCredentialsException("Incorrect Password");
         }
@@ -38,14 +42,13 @@ public class MyCustomAuthenticationProvider implements AuthenticationProvider {
                 new UsernamePasswordAuthenticationToken(
                         userDetails,
                         userDetails.getPassword(),
-                        userDetails.getAuthorities()
-                );
+                        userDetails.getAuthorities());
         usernamePasswordAuthenticationToken.setDetails(authentication.getDetails());
         return usernamePasswordAuthenticationToken;
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return false;
+        return authentication.equals(AuthenticationProvider.class);
     }
 }

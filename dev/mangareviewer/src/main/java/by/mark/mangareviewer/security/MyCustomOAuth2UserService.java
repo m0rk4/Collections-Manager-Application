@@ -8,7 +8,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequestEntityConverter;
@@ -26,7 +25,10 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class MyCustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
@@ -35,6 +37,8 @@ public class MyCustomOAuth2UserService implements OAuth2UserService<OAuth2UserRe
     private static final String INVALID_USER_INFO_RESPONSE_ERROR_CODE = "invalid_user_info_response";
 
     private static final String MISSING_USER_NAME_ATTRIBUTE_ERROR_CODE = "missing_user_name_attribute";
+
+    private static final String ACCOUNT_IS_LOCKED = "account_is_locked";
 
     private static final ParameterizedTypeReference<Map<String, Object>> PARAMETERIZED_RESPONSE_TYPE = new ParameterizedTypeReference<Map<String, Object>>() {
     };
@@ -99,9 +103,17 @@ public class MyCustomOAuth2UserService implements OAuth2UserService<OAuth2UserRe
         Set<GrantedAuthority> authorities = new LinkedHashSet<>();
         authorities.add(new OAuth2UserAuthority(userAttributes));
 
-        userService.updateOAuth2User(userAttributes, authorities);
+        User user = userService.updateOAuth2User(userAttributes, authorities);
 
-        return new DefaultOAuth2User(authorities, userAttributes, userNameAttributeName);
+        if (user.isNonLocked())
+            return new DefaultOAuth2User(authorities, userAttributes, userNameAttributeName);
+        else {
+            OAuth2Error oauth2Error = new OAuth2Error(
+                    ACCOUNT_IS_LOCKED,
+                    "Your account is locked: ", null);
+            throw new OAuth2AuthenticationException(oauth2Error, oauth2Error.toString());
+        }
+
     }
 
     private RestTemplate createRestTemplate() {

@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import VueResource from 'vue-resource'
 
 export default {
     register: (email, login, pass) =>

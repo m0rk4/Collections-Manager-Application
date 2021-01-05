@@ -75,8 +75,6 @@ export default {
         } else {
           if (this.isDialog)
             this.onClick();
-          if (this.$router.currentRoute.path !== '/')
-            this.$router.push('/')
           this.$store.dispatch('alert/activateAlertAction', {message: 'Successfully Authenticated', type: 'success'})
         }
       })

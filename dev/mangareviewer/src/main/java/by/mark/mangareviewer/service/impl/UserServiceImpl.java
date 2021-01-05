@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
     public User updateOAuth2User(Map<String, Object> attributes, Set<GrantedAuthority> authorities) {
         String id = attributes.get("id") instanceof String ?
                 (String) attributes.get("id") : String.valueOf(attributes.get("id"));
-        User user = userDetailsRepo.findById(id).orElseGet(() -> createOAuth2User(id, attributes));
+        User user = this.findById(id).orElseGet(() -> createOAuth2User(id, attributes));
         authorities.addAll(user.getAuthorities());
         user.setLastVisit(LocalDateTime.now());
         return userDetailsRepo.save(user);
@@ -63,6 +64,44 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public Optional<User> findById(String id) {
+        return userDetailsRepo.findById(id);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userDetailsRepo.findAll();
+    }
+
+    @Override
+    public List<User> updateAdmins(
+            List<User> usersDto,
+            boolean isForceMakeAdmin
+    ) {
+        List<User> users = getUsersFromDbById(usersDto);
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.USER);
+        if (isForceMakeAdmin) {
+            roles.add(Role.ADMIN);
+        }
+        users.forEach(u -> u.setRoles(roles));
+        return userDetailsRepo.saveAll(users);
+    }
+
+    @Override
+    public void deleteUsers(List<User> users) {
+        userDetailsRepo.deleteAll(users);
+    }
+
+    @Override
+    public void updateUsersLocked(List<User> usersDto, boolean isNonLocked) {
+        List<User> users = getUsersFromDbById(usersDto);
+        users.forEach(u -> u.setNonLocked(isNonLocked));
+        userDetailsRepo.saveAll(users);
+    }
+
+
     private User createOAuth2User(String id, Map<String, Object> attributes) {
         User user = new User();
         user.setId(id);
@@ -72,5 +111,12 @@ public class UserServiceImpl implements UserService {
         user.setRoles(Collections.singleton(Role.USER));
         user.setNonLocked(true);
         return user;
+    }
+
+    private List<User> getUsersFromDbById(List<User> usersDto){
+        return userDetailsRepo.findAllById(
+                usersDto.stream()
+                        .map(User::getId)
+                        .collect(Collectors.toList()));
     }
 }

@@ -1,12 +1,14 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import alertModule from "store/alertModule";
+import alertStore from "store/alertStore"
+import authStore from "store/authStore"
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     modules: {
-        alert: alertModule,
+        alert: alertStore,
+        auth: authStore,
     }
 })
 

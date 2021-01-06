@@ -1,27 +1,51 @@
 <template>
   <div>
-    <v-btn rounded @click="lockUsers">Lock</v-btn>
-    <v-btn rounded @click="unlockUsers">Unlock</v-btn>
-    <v-btn rounded @click="deleteUsers">Delete</v-btn>
-    <v-btn rounded @click="makeAdmin">Make Admin</v-btn>
-    <v-btn rounded @click="unmakeAdmin">Unmake Admin</v-btn>
-    <v-data-table
-        v-model="selected"
-        :headers="headers"
-        :items="users"
-        :single-select="singleSelect"
-        item-key="name"
-        show-select
-        class="elevation-1"
-    >
-      <template v-slot:top>
-        <v-switch
-            v-model="singleSelect"
-            label="Single select"
-            class="pa-3"
-        ></v-switch>
-      </template>
-    </v-data-table>
+    <v-card>
+      <v-card-title>
+        Admin Panel
+        <v-spacer></v-spacer>
+        <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+        ></v-text-field>
+      </v-card-title>
+      <v-card-text>
+        <v-row class="justify-center">
+          <v-col class="justify-center">
+            <v-btn rounded @click="makeAdmin">Make Admin</v-btn>
+            <v-btn rounded @click="unmakeAdmin">Unmake Admin</v-btn>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center">
+          <v-col class="justify-center">
+            <v-btn rounded @click="lockUsers">Lock</v-btn>
+            <v-btn rounded @click="unlockUsers">Unlock</v-btn>
+            <v-btn rounded @click="deleteUsers">Delete</v-btn>
+          </v-col>
+        </v-row>
+        <v-data-table
+            v-model="selected"
+            :headers="headers"
+            :items="users"
+            :single-select="singleSelect"
+            item-key="name"
+            show-select
+            :search="search"
+            class="elevation-1"
+        >
+          <template v-slot:top>
+            <v-switch
+                v-model="singleSelect"
+                label="Single select"
+                class="pa-3"
+            ></v-switch>
+          </template>
+        </v-data-table>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -31,6 +55,7 @@ import profileApi from "api/profileApi";
 export default {
   data() {
     return {
+      search: '',
       singleSelect: false,
       selected: [],
       headers: [

@@ -2,6 +2,7 @@ package by.mark.mangareviewer.controller;
 
 import by.mark.mangareviewer.domain.user.User;
 import by.mark.mangareviewer.service.AuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@Slf4j
 public class MainController {
 
     private final AuthService authService;
@@ -31,8 +33,9 @@ public class MainController {
     ) {
         User currentUser = authService.getCurrentUser(basicUser, oAuth2User);
         model.addAttribute("profile", currentUser);
-
+        log.info("IN MAIN CONTROLLER: {}", currentUser);
         model.addAttribute("isDevMode", "dev".equals(activeProfile));
         return "index";
     }
+
 }

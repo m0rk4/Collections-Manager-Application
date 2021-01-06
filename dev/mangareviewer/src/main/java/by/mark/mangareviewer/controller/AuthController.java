@@ -6,6 +6,7 @@ import by.mark.mangareviewer.dto.RegistrationFormDto;
 import by.mark.mangareviewer.service.UserService;
 import by.mark.mangareviewer.util.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,8 +23,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URI;
 
 @RestController
 public class AuthController {
@@ -58,7 +62,10 @@ public class AuthController {
     }
 
     @PostMapping("signin")
-    public ResponseEntity<?> login(@RequestBody LoginFormDto loginFormDto, HttpServletRequest request) {
+    public ResponseEntity<?> login(
+            @RequestBody LoginFormDto loginFormDto,
+            HttpServletRequest request
+    ) {
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(loginFormDto.getUsername(), loginFormDto.getPassword());
         token.setDetails(new WebAuthenticationDetails(request));
@@ -68,7 +75,7 @@ public class AuthController {
             sc.setAuthentication(auth);
             HttpSession session = request.getSession(true);
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
-            return new ResponseEntity<String>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (AuthenticationException exception) {
             return new ResponseEntity<>(ControllerUtils.getMessageError(exception.getMessage()), HttpStatus.OK);
         }

@@ -70,11 +70,13 @@ export default {
     },
     login() {
       authApi.login(this.username, this.password).then(res => {
+        console.log(res)
         if (res.body.message) {
           this.$store.dispatch('alert/activateAlertAction', {message: res.body.message, type: 'error'})
         } else {
           if (this.isDialog)
             this.onClick();
+          this.$router.go(0)
           this.$store.dispatch('alert/activateAlertAction', {message: 'Successfully Authenticated', type: 'success'})
         }
       })

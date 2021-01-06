@@ -8,6 +8,7 @@
     <title>Manga Reviewer</title>
     <script th:inline="javascript">
         var profile = [[${profile}]];
+        console.log(profile ? profile : "default message")
     </script>
 </head>
 <body>

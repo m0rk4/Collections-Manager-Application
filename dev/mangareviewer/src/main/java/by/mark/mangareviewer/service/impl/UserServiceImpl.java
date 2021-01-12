@@ -5,6 +5,7 @@ import by.mark.mangareviewer.domain.user.User;
 import by.mark.mangareviewer.repo.UserDetailsRepo;
 import by.mark.mangareviewer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,8 +19,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Value("${default-profile-avatar}")
+    private String defaultAvatarUrl;
+
     private final UserDetailsRepo userDetailsRepo;
     private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
     public UserServiceImpl(UserDetailsRepo userDetailsRepo, PasswordEncoder passwordEncoder) {
@@ -59,6 +64,7 @@ public class UserServiceImpl implements UserService {
         user.setId(UUID.randomUUID().toString());
         user.setRoles(Collections.singleton(Role.USER));
         user.setNonLocked(true);
+        user.setUserpic(defaultAvatarUrl);
         user.setLastVisit(LocalDateTime.now());
         userDetailsRepo.save(user);
         return true;
@@ -107,7 +113,8 @@ public class UserServiceImpl implements UserService {
         user.setId(id);
         user.setEmail((String) attributes.get("email"));
         user.setName((String) Optional.ofNullable(attributes.get("name")).orElse(attributes.get("login")));
-        user.setUserpic((String) attributes.get("avatar_url"));
+        String avatarUrl = (String) attributes.get("avatar_url");
+        user.setUserpic(avatarUrl != null ? avatarUrl : defaultAvatarUrl);
         user.setRoles(Collections.singleton(Role.USER));
         user.setNonLocked(true);
         return user;

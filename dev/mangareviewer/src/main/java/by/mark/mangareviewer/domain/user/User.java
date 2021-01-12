@@ -2,7 +2,9 @@ package by.mark.mangareviewer.domain.user;
 
 import by.mark.mangareviewer.domain.Views;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,12 +14,17 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "usr")
 @Data
 @EqualsAndHashCode(of = {"id"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class User implements UserDetails, Serializable {
     @Id
     @JsonView(Views.Id.class)
@@ -37,9 +44,12 @@ public class User implements UserDetails, Serializable {
     @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-    private String password;
 
+    private String password;
     private String userpic;
+
+    @OneToMany(mappedBy = "user")
+    private Set<by.mark.mangareviewer.domain.Collection> collections = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

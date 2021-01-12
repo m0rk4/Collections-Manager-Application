@@ -1,20 +1,39 @@
 <template>
   <v-card>
-    <v-img>
-
-    </v-img>
+    <v-avatar
+        class="profile"
+        color="grey"
+        width="100%"
+        height="100%"
+        tile
+    >
+      <v-img :src="profile.userpic"></v-img>
+    </v-avatar>
+    <v-divider></v-divider>
     <v-card-title>
-
+      {{ profile.name }}
     </v-card-title>
+    <v-divider></v-divider>
     <v-card-text>
-      <!-- Info actions here -->
+      <v-container fluid>
+        <v-card class="pa-4">
+          <div>Last visit</div>
+          <div><i>{{ profile.lastVisit }}</i></div>
+        </v-card>
+      </v-container>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+import {mapState} from 'vuex'
+
 export default {
-  name: "ProfileCard"
+  computed: {
+    ...mapState({
+      profile: state => state.auth.profile,
+    }),
+  }
 }
 </script>
 

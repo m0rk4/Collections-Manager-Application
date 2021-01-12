@@ -28,7 +28,7 @@ public class MyCustomAuthenticationProvider implements AuthenticationProvider {
             if (userDetails.isAccountNonLocked()) {
                 return getUsernamePasswordAuthenticationToken(authentication, userDetails);
             } else {
-                throw new BadCredentialsException("Your account is locked by admin");
+                throw new BadCredentialsException("Your account is locked by Admin");
             }
         } else {
             throw new BadCredentialsException("Incorrect Password");

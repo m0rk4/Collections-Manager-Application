@@ -10,5 +10,4 @@ export default {
     deleteUsers: (usersToDelete) => Vue.http.post('api/profile/deleteUsers', usersToDelete),
     makeAdmins: (usersToAdmins) => Vue.http.post('api/profile/makeAdmins', usersToAdmins),
     unmakeAdmins: (usersToNotAdmins) => Vue.http.post('api/profile/unmakeAdmins', usersToNotAdmins),
-
 }

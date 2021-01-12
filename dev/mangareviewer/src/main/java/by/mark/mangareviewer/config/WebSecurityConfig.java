@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .oauth2Login().loginPage("/login").permitAll()
                 .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/", true).permitAll()
+                .formLogin().loginPage("/login").permitAll()
                 .and()
                 .logout(l -> l.logoutSuccessUrl("/").permitAll());
     }

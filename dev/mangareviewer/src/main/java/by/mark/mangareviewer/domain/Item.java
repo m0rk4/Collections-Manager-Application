@@ -28,4 +28,7 @@ public class Item {
     )
     private Set<Tag> tags = new HashSet<>();
 
+    @OneToMany(mappedBy = "item")
+    private Set<Value> values = new HashSet<>();
+
 }

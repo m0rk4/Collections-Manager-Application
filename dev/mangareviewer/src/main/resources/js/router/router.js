@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import MainPage from "pages/MainPage.vue"
+import MainPage from "pages/main/MainPage.vue"
 import UserPage from "pages/UserPage.vue";
 import RegisterPage from "pages/auth/RegisterPage.vue";
 import LoginPage from "pages/auth/LoginPage.vue";
 import NotFoundPage from "pages/NotFoundPage.vue";
-import AdminPage from "pages/AdminPage.vue";
+import AdminPage from "pages/admin/AdminPage.vue";
 import CreateCollectionPage from "pages/CreateCollectionPage.vue";
+import CollectionPage from "pages/CollectionPage.vue";
 
 Vue.use(VueRouter)
 
@@ -16,7 +17,9 @@ const routes = [
     {path: '/register', component: RegisterPage},
     {path: '/user/:id?', component: UserPage},
     {path: '/admin', component: AdminPage},
+    {path: '/collection/:id', component: CollectionPage},
     {path: '/create-collection', component: CreateCollectionPage},
+    {path: '/update-collection/:id', component: CreateCollectionPage},
     {path: '/*', component: NotFoundPage}
 ]
 

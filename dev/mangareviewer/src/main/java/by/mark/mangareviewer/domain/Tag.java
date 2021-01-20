@@ -1,5 +1,6 @@
 package by.mark.mangareviewer.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,11 +10,13 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "name"})
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Views.Id.class)
     private Long id;
+    @JsonView(Views.IdName.class)
     private String name;
 
     @ManyToMany(mappedBy = "tags")

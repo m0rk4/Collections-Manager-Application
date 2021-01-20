@@ -28,4 +28,14 @@ public class CollectionServiceImpl implements CollectionService {
     public List<Collection> getAllUserCollections(User user) {
         return collectionRepo.findAllByUser(user);
     }
+
+    @Override
+    public void deleteCollection(Collection collection) {
+        collectionRepo.delete(collection);
+    }
+
+    @Override
+    public Collection saveCollection(Collection toSave) {
+        return collectionRepo.save(toSave);
+    }
 }

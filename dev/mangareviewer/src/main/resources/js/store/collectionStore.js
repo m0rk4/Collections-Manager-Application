@@ -17,6 +17,25 @@ export default {
                 ...state.userCollections,
                 newCollection
             ]
+        },
+        deleteCollectionMutation(state, collection) {
+            const indexToDelete = state.userCollections.findIndex(el => el.id === collection.id)
+            if (indexToDelete > -1) {
+                state.userCollections = [
+                    ...state.userCollections.splice(0, indexToDelete),
+                    ...state.userCollections.splice(indexToDelete + 1)
+                ]
+            }
+        },
+        updateCollectionMutation(state, updatedCollection) {
+            const indexToReplace = state.userCollections.findIndex(el => el.id === updatedCollection.id)
+            if (indexToReplace > -1) {
+                state.userCollections = [
+                    ...state.userCollections.splice(0, indexToReplace),
+                    updatedCollection,
+                    ...state.userCollections.splice(indexToReplace + 1)
+                ]
+            }
         }
     },
     actions: {
@@ -33,6 +52,20 @@ export default {
                     commit('addCollectionMutation', responseCollection)
                 })
             })
-        }
+        },
+        deleteCollectionAction({commit}, collection) {
+            collectionApi.deleteCollection(collection.id).then(res => {
+                if (res.ok) {
+                    commit('deleteCollectionMutation', collection)
+                }
+            })
+        },
+        updateCollectionAction({commit}, collection) {
+            collectionApi.updateCollection(collection).then(res => {
+                res.json().then(responseCollection => {
+                    commit('updateCollectionMutation', responseCollection)
+                })
+            })
+        },
     }
 }

@@ -4,7 +4,7 @@
       <v-card>
         <v-toolbar flat>
           <v-toolbar-title>
-            New Collection
+            {{ toUpdate ? 'Update Collection' : 'New Collection' }}
           </v-toolbar-title>
         </v-toolbar>
         <v-divider></v-divider>
@@ -67,7 +67,7 @@
               <div class="primary text-center"><span class="white--text">Create your field</span></div>
               <v-text-field label="Field Name" v-model="newField">
               </v-text-field>
-              <v-checkbox v-model="markDownSupported" label="MarkDown"></v-checkbox>
+              <v-checkbox v-model="isMarkDownSupported" label="MarkDown"></v-checkbox>
               <v-btn @click="addField">add</v-btn>
             </v-card>
           </v-container>
@@ -77,7 +77,7 @@
               color="success"
               @click="submitCollection"
           >
-            Submit
+            {{ toUpdate ? 'Update' : 'Submit' }}
           </v-btn>
         </v-card-text>
 
@@ -92,7 +92,7 @@ import collectionApi from "api/collectionApi"
 export default {
   data() {
     return {
-      markDownSupported: false,
+      isMarkDownSupported: false,
       allFields: [],
       newField: '',
       search: null,
@@ -103,10 +103,13 @@ export default {
       fileUrl: null,
       fileStatus: 'No file',
       allThemes: [],
-      selectedFields: []
+      selectedFields: [],
+      existingCollection: null
     }
   },
   created() {
+    this.toUpdate = this.$route.params.id
+    console.log(this.toUpdate)
     this.picWidget = cloudinary.createUploadWidget(
         {
           cloud_name: 'dr7gxyl6z',
@@ -122,6 +125,22 @@ export default {
     );
   },
   beforeMount() {
+    if (this.toUpdate) {
+      collectionApi.getCollection(this.toUpdate).then(res => {
+        res.json().then(collection => {
+          this.existingCollection = collection
+          this.title = collection.title
+          this.description = collection.description
+          this.theme = collection.theme
+          if (collection.pic) {
+            this.fileUrl = collection.pic
+            this.fileStatus = 'OK'
+          }
+          this.selectedFields = collection.fields
+        })
+      })
+
+    }
     collectionApi.getAllThemes().then(res => {
       res.json().then(data => {
         data.forEach(item => {
@@ -144,20 +163,25 @@ export default {
     },
     addField() {
       if (this.newField) {
-        this.selectedFields.push({text: this.newField, markDownSupported: this.markDownSupported})
-        this.markDownSupported = false
+        this.selectedFields.push({text: this.newField, isMarkDownSupported: this.isMarkDownSupported})
+        this.isMarkDownSupported = false
         this.newField = ''
       }
     },
     submitCollection() {
       const collection = {
+        id: this.existingCollection ? this.existingCollection.id : null,
         title: this.title,
         description: this.description,
         pic: this.fileUrl,
         theme: this.theme,
         fields: this.selectedFields
       }
-      this.$store.dispatch('collection/addCollectionAction', collection)
+      if (this.toUpdate)
+        this.$store.dispatch('collection/updateCollectionAction', collection)
+      else
+        this.$store.dispatch('collection/addCollectionAction', collection)
+      this.$router.go(-1)
     }
   }
 }

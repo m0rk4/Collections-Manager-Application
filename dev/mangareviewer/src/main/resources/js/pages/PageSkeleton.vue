@@ -16,6 +16,7 @@
       </div>
       <div v-else>
         <v-btn text
+               rounded
                class="mx-2"
         @click="$router.push('/user')"
         :disabled="$router.currentRoute.path === '/user'"

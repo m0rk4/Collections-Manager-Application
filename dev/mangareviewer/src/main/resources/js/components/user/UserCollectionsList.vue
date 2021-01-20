@@ -27,15 +27,40 @@
                 </v-avatar>
                 <v-divider></v-divider>
                 <v-card-title>
-                  <v-btn text>{{ c.title }}</v-btn>
+                  <v-btn
+                      text
+                      @click="$router.push({path: `collection/${c.id}`})"
+                  >
+                    {{ c.title }}
+                  </v-btn>
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-card-text>
                   <v-container fluid>
                     <div>Theme: {{ c.theme.text }}</div>
-                    <div>Author: {{  }}</div>
+                    <div>Author: {{ }}</div>
                   </v-container>
                 </v-card-text>
+                <v-card-actions>
+                  <v-container>
+                    <v-row>
+                      <v-btn
+                          text
+                          color="primary"
+                          @click="$router.push({ path: `/update-collection/${c.id}` })"
+                      >
+                        Update
+                      </v-btn>
+                      <v-btn
+                          text
+                          color="primary"
+                          @click="$store.dispatch('collection/deleteCollectionAction', c)"
+                      >
+                        Delete
+                      </v-btn>
+                    </v-row>
+                  </v-container>
+                </v-card-actions>
               </v-card>
             </div>
           </div>

@@ -1,10 +1,7 @@
 package by.mark.mangareviewer.domain.user;
 
 import by.mark.mangareviewer.domain.Views;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,10 +18,6 @@ import java.util.Set;
 @Table(name = "usr")
 @Data
 @EqualsAndHashCode(of = {"id"})
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 public class User implements UserDetails, Serializable {
     @Id
     @JsonView(Views.Id.class)
@@ -38,23 +31,24 @@ public class User implements UserDetails, Serializable {
     @JsonView(Views.IdName.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastVisit;
+    @JsonView(Views.IdName.class)
+    private String userpic;
 
-    @JsonView(Views.FullProfile.class)
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @JsonView(Views.IdName.class)
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
     private String password;
-    private String userpic;
 
     @OneToMany(mappedBy = "user")
     private Set<by.mark.mangareviewer.domain.Collection> collections = new HashSet<>();
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
 
     @Override
     public String getPassword() {

@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>Manga Reviewer</title>
     <script th:inline="javascript">
-        var profile = [[${profile}]];
+        var profile = [# th:utext="${profile}" /];
         console.log(profile ? profile : "NO PROFILE")
     </script>
     <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript">

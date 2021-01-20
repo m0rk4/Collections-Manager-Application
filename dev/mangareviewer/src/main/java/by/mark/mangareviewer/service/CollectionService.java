@@ -8,4 +8,6 @@ import java.util.List;
 public interface CollectionService {
     Collection addNewCollection(Collection collection);
     List<Collection> getAllUserCollections(User user);
+    void deleteCollection(Collection collection);
+    Collection saveCollection(Collection toSave);
 }

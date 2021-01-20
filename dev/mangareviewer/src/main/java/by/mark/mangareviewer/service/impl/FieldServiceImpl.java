@@ -27,4 +27,9 @@ public class FieldServiceImpl implements FieldService {
     public List<Field> saveFields(Iterable<Field> toSave) {
        return fieldRepo.saveAll(toSave);
     }
+
+    @Override
+    public void deleteFields(Iterable<Field> toDelete) {
+        fieldRepo.deleteAll(toDelete);
+    }
 }

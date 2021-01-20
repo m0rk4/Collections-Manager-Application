@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "text"})
 public class Field {
 
     @JsonView(Views.Id.class)
@@ -24,15 +24,6 @@ public class Field {
     @JsonProperty(value = "isMarkDownSupported")
     private boolean isMarkDownSupported;
 
-
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "field_value",
-            joinColumns = {@JoinColumn(name = "field_id")},
-            inverseJoinColumns = {@JoinColumn(name = "value_id")}
-    )
+    @OneToMany(mappedBy = "field")
     private Set<Value> values = new HashSet<>();
-
-
-
 }

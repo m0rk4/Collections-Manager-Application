@@ -1,12 +1,10 @@
 package by.mark.mangareviewer.controller;
 
-import by.mark.mangareviewer.domain.Collection;
-import by.mark.mangareviewer.domain.Field;
-import by.mark.mangareviewer.domain.Theme;
-import by.mark.mangareviewer.domain.Views;
+import by.mark.mangareviewer.domain.*;
 import by.mark.mangareviewer.domain.user.User;
 import by.mark.mangareviewer.service.*;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,14 +23,16 @@ public class CollectionController {
     private final FieldService fieldService;
     private final CollectionService collectionService;
     private final AuthService authService;
+    private final TagService tagService;
 
 
     @Autowired
-    public CollectionController(ThemeService themeService, FieldService fieldService, CollectionService collectionService, AuthService authService) {
+    public CollectionController(ThemeService themeService, FieldService fieldService, CollectionService collectionService, AuthService authService, TagService tagService) {
         this.themeService = themeService;
         this.fieldService = fieldService;
         this.collectionService = collectionService;
         this.authService = authService;
+        this.tagService = tagService;
     }
 
     @GetMapping("theme")
@@ -41,10 +41,22 @@ public class CollectionController {
         return themeService.getAllThemes();
     }
 
+    @GetMapping("tag")
+    @JsonView(Views.IdName.class)
+    public List<Tag> getAllTags() {
+        return tagService.getAllTags();
+    }
+
     @GetMapping("field")
     @JsonView(Views.IdName.class)
     public List<Field> getAllFields() {
         return fieldService.getAllFields();
+    }
+
+    @GetMapping("user/{id}")
+    @JsonView(Views.IdName.class)
+    public List<Collection> getAllUserCollections(@PathVariable("id") User user) {
+        return collectionService.getAllUserCollections(user);
     }
 
     @PostMapping
@@ -59,10 +71,28 @@ public class CollectionController {
         return collectionService.addNewCollection(collection);
     }
 
-    @GetMapping("user/{id}")
-    @JsonView(Views.IdName.class)
-    public List<Collection> getAllUserCollections(@PathVariable("id") User user) {
-        return collectionService.getAllUserCollections(user);
+    @DeleteMapping("{id}")
+    public void deleteCollection(@PathVariable("id") Collection collectionToDelete) {
+        collectionToDelete.getFields().clear();
+        collectionService.deleteCollection(collectionToDelete);
     }
+
+    @PutMapping("{id}")
+    public Collection updateCollection(
+            @PathVariable("id") Collection collectionFromDb,
+            @RequestBody Collection updatedCollection
+    ) {
+        collectionFromDb.getFields().clear();
+        collectionFromDb.setFields(new HashSet<>(fieldService.saveFields(updatedCollection.getFields())));
+        BeanUtils.copyProperties(updatedCollection, collectionFromDb, "id", "user", "fields");
+        return collectionService.saveCollection(collectionFromDb);
+    }
+
+    @GetMapping("{id}")
+    @JsonView(Views.FullCollection.class)
+    public Collection getCollection(@PathVariable("id") Collection collectionFromDb) {
+        return collectionFromDb;
+    }
+
 
 }

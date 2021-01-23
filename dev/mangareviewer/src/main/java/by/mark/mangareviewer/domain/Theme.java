@@ -15,10 +15,6 @@ import java.util.Set;
 @Entity
 @Data
 @EqualsAndHashCode(of = {"id"})
-@JsonIdentityInfo(
-        property = "id",
-        generator = ObjectIdGenerators.PropertyGenerator.class
-)
 public class Theme {
     @JsonView(Views.Id.class)
     @Id
@@ -28,5 +24,9 @@ public class Theme {
     private String text;
 
     @OneToMany(mappedBy = "theme")
+    @JsonIdentityInfo(
+            property = "id",
+            generator = ObjectIdGenerators.PropertyGenerator.class
+    )
     private Set<Collection> collections = new HashSet<>();
 }

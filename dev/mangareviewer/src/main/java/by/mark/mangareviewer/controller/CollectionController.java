@@ -25,7 +25,6 @@ public class CollectionController {
     private final AuthService authService;
     private final TagService tagService;
 
-
     @Autowired
     public CollectionController(ThemeService themeService, FieldService fieldService, CollectionService collectionService, AuthService authService, TagService tagService) {
         this.themeService = themeService;

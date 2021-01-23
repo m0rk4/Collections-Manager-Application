@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-data-iterator
-        :items="this.collectionItems"
+        :items="itemsToDisplay"
         :items-per-page.sync="itemsPerPage"
         :page="page"
         :search="search"
@@ -16,6 +16,7 @@
             class="mb-1"
         >
           <v-text-field
+              class="mr-1"
               v-model="search"
               clearable
               flat
@@ -24,9 +25,10 @@
               prepend-inner-icon="mdi-magnify"
               label="Search"
           ></v-text-field>
-          <template v-if="$vuetify.breakpoint.mdAndUp">
+          <template v-if="$vuetify.breakpoint.smAndUp">
             <v-spacer></v-spacer>
             <v-select
+                class="mr-1"
                 v-model="sortBy"
                 flat
                 solo-inverted
@@ -73,10 +75,14 @@
           >
             <v-card>
               <v-card-title class="subheading font-weight-bold">
-                {{ item.title }}
+                <v-btn text rounded>{{ item.title }}</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn icon><v-icon>mdi-pencil</v-icon></v-btn>
-                <v-btn icon><v-icon>mdi-delete</v-icon></v-btn>
+                <v-btn icon @click="updateItem">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn icon>
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
               </v-card-title>
 
               <v-divider></v-divider>
@@ -85,7 +91,7 @@
                   <v-list dense>
                     <v-list-item
                         v-for="(key, index) in filteredKeys"
-                        :key="index"
+                        :key="String(index)"
                     >
                       <v-list-item-content :class="{ 'blue--text': sortBy === key }">
                         {{ key }}:
@@ -95,17 +101,28 @@
                           class="align-end"
                           :class="{ 'blue--text': sortBy === key }"
                       >
-                        {{ getFieldValue(item, key) }}
+                        {{ item[key.toLowerCase()] }}
                       </v-list-item-content>
                       <v-list-item-content
                           v-else
                           class="align-end"
                           :class="{ 'blue--text': sortBy === key }"
                       >
-                        <vue-markdown :source="getFieldValue(item, key)"></vue-markdown>
+                        <vue-markdown :source="item[key.toLowerCase()]"></vue-markdown>
                       </v-list-item-content>
                     </v-list-item>
                   </v-list>
+                  <v-combobox
+                      v-model="item['tags']"
+                      small-chips
+                      chips
+                      multiple
+                      persistent-hint
+                      single-line
+                      readonly
+                      dense
+                  >
+                  </v-combobox>
                 </v-container>
               </v-card-text>
             </v-card>
@@ -203,7 +220,6 @@ export default {
       this.currCollection = newVal
       this.keys.push('Title')
       this.currCollection.fields.forEach(f => this.keys.push(f.text))
-      console.log(this.currCollection.items)
       this.$store.commit('item/setCollectionItemsMutation', this.currCollection.items)
     }
   },
@@ -215,20 +231,29 @@ export default {
     filteredKeys() {
       return this.keys.filter(key => key !== 'Name')
     },
+    itemsToDisplay() {
+      const displayItems = []
+      this.collectionItems.forEach(i => {
+        var obj = {}
+        obj['id'] = i.id
+        obj['tags'] = i.tags.map(t => {return {text: t.name, value: t.id}})
+        obj['title'] = i.title
+        this.keys.forEach(k => {
+          if (k !== 'Title') {
+            const id = i.values.findIndex(val => val.field.text === k)
+            obj[k.toLowerCase()] = i.values[id].value
+          }
+        })
+        displayItems.push(obj)
+      })
+      return displayItems
+    }
   },
   methods: {
     isKeySupportsMarkDown(key) {
       const fieldId = this.currCollection.fields.findIndex(f => f.text === key)
-      if (fieldId > -1) {
-        return this.currCollection.fields[fieldId].isMarkDownSupported
-      }
+      if (fieldId > -1) return this.currCollection.fields[fieldId].isMarkDownSupported
       return false
-    },
-    getFieldValue(item, key) {
-      return key === 'Title' ?
-          item[key.toLowerCase()] :
-          item.values[item.values.findIndex(v => v.field.text === key)] ?
-              item.values[item.values.findIndex(v => v.field.text === key)].value : ''
     },
     nextPage() {
       if (this.page + 1 <= this.numberOfPages) this.page += 1
@@ -239,6 +264,7 @@ export default {
     updateItemsPerPage(number) {
       this.itemsPerPage = number
     },
+    updateItem() {}
   },
 }
 </script>

@@ -1,4 +1,5 @@
 import itemApi from "api/itemApi"
+import {extractNewTags} from "util/util";
 
 export default {
     namespaced: true,
@@ -14,17 +15,22 @@ export default {
             ]
         },
         setCollectionItemsMutation(state, newItems) {
-            console.log('here')
             state.collectionItems = [
                 ...newItems
             ]
+            console.log(state.collectionItems)
         }
     },
     actions: {
-        addNewItemAction({commit}, itemToAdd) {
+        addNewItemAction({commit, state}, itemToAdd) {
             itemApi.addNewItem(itemToAdd).then(res => {
                 res.json().then(savedItem => {
                     commit('addNewItemMutation', savedItem)
+                    commit(
+                        'tag/addTagsMutation',
+                        extractNewTags(savedItem.tags, itemToAdd.tags),
+                        {root: true}
+                    )
                 })
             })
         }

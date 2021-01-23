@@ -42,6 +42,7 @@ export default {
         getAllUserCollectionsAction({commit}, userId) {
             collectionApi.getAllUserCollections(userId).then(res => {
                 res.json().then(allCollections => {
+                    console.log(allCollections)
                     commit('addAllUserCollectionsMutation', allCollections)
                 })
             })

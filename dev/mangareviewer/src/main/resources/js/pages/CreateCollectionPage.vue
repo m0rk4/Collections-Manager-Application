@@ -10,13 +10,18 @@
         <v-divider></v-divider>
         <v-card-text>
           <v-container>
-            <v-form>
-
+            <v-form
+                ref="addForm"
+                v-model="valid"
+                lazy-validation
+            >
               <v-text-field
                   v-model="title"
                   outlined
                   label="Title"
                   clearable
+                  :rules="titleRules"
+                  required
               ></v-text-field>
 
               <v-textarea
@@ -26,6 +31,8 @@
                   outlined
                   label="Description (MarkDown supported)"
                   rows="1"
+                  :rules="descRules"
+                  required
               ></v-textarea>
 
               <v-combobox
@@ -33,6 +40,8 @@
                   :items="allThemes"
                   label="Theme"
                   outlined
+                  persistent-hint
+                  :rules="[v => !!v || 'Choose one theme']"
               ></v-combobox>
 
               <v-btn @click="picWidget.open()" color="primary">Upload Picture</v-btn>
@@ -61,12 +70,18 @@
                 multiple
                 persistent-hint
                 small-chips
+                :rules="[v => v.length > 0 || 'Choose or Add at least one field']"
             >
             </v-combobox>
             <v-card class="pa-4">
               <div class="primary text-center"><span class="white--text">Create your field</span></div>
-              <v-text-field label="Field Name" v-model="newField">
-              </v-text-field>
+              <v-form lazy-validation v-model="valid" ref="fieldForm">
+                <v-text-field
+                    label="Field Name"
+                    v-model="newField"
+                    :rules="fieldRules"
+                ></v-text-field>
+              </v-form>
               <v-checkbox v-model="isMarkDownSupported" label="MarkDown"></v-checkbox>
               <v-btn @click="addField">add</v-btn>
             </v-card>
@@ -92,6 +107,19 @@ import collectionApi from "api/collectionApi"
 export default {
   data() {
     return {
+      titleRules: [
+        v => !!v || 'Title is required',
+        v => (v && v.length <= 50) || 'Title must be less than 50 characters',
+      ],
+      descRules: [
+        v => !!v || 'Description is required',
+        v => (v && v.length <= 1000) || 'Up to 1000 characters',
+      ],
+      fieldRules: [
+        v => !!v || 'Field name is required',
+        v => (v && v.length <= 15) || 'Field name must be less than 15 characters',
+      ],
+      valid: true,
       isMarkDownSupported: false,
       allFields: [],
       newField: '',
@@ -162,13 +190,14 @@ export default {
       this.fileStatus = status
     },
     addField() {
-      if (this.newField) {
-        this.selectedFields.push({text: this.newField, isMarkDownSupported: this.isMarkDownSupported})
-        this.isMarkDownSupported = false
-        this.newField = ''
-      }
+      if (!this.$refs.fieldForm.validate())
+        return
+      this.selectedFields.push({text: this.newField, isMarkDownSupported: this.isMarkDownSupported})
+      this.$refs.fieldForm.reset()
     },
     submitCollection() {
+      if (!this.$refs.addForm.validate())
+        return
       const collection = {
         id: this.existingCollection ? this.existingCollection.id : null,
         title: this.title,
@@ -182,6 +211,7 @@ export default {
       else
         this.$store.dispatch('collection/addCollectionAction', collection)
       this.$router.go(-1)
+      this.$refs.addForm.reset()
     }
   }
 }

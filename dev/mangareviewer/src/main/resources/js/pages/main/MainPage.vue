@@ -17,7 +17,6 @@ import TagCloud from "components/TagCloud.vue";
 
 export default {
   components: {TagCloud, PopularCollectionsList, MangaList}
-
 }
 </script>
 

@@ -1,33 +1,38 @@
 <template>
   <v-container fluid>
-    <v-card rounded outlined shaped class="mb-8">
-      <v-card-text>
-        <v-container fluid>
-          <v-parallax
-              height="300"
-              dark
-              :src="currCollection.pic"
-          >
-            <v-row
-                align="center"
-                justify="center"
-            >
-              <v-col
-                  class="text-center"
-                  cols="12"
-              >
-                <h1 class="display-4 font-weight-bold black--text mb-4">
-                  {{ currCollection.title }}
-                </h1>
-              </v-col>
-            </v-row>
-          </v-parallax>
-        </v-container>
-      </v-card-text>
-    </v-card>
-
     <v-row>
       <v-col>
+        <v-card rounded outlined shaped class="mb-8">
+          <v-card-text>
+            <v-container fluid>
+              <v-parallax
+                  height="300"
+                  dark
+                  :src="currCollection.pic"
+              >
+                <v-row
+                    align="center"
+                    justify="center"
+                >
+                  <v-col
+                      class="text-center"
+                      cols="12"
+                  >
+                    <h1 class="display-4 font-weight-bold black--text mb-4">
+                      {{ currCollection.title }}
+                    </h1>
+                  </v-col>
+                </v-row>
+              </v-parallax>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+
+    <v-row>
+      <v-col class="col-12 col-md-6 col-lg-6 col-xl-6">
         <v-card>
           <v-toolbar flat>
             <v-list-item two-line>
@@ -53,11 +58,10 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col>
+      <v-col class="col-12 col-md-6 col-lg-6 col-xl-6">
         <collection-form
             :currentCollection="currCollection"
             :valuesList="values"
-            :allTagsList="allTags"
         ></collection-form>
       </v-col>
     </v-row>
@@ -82,19 +86,12 @@ export default {
   components: {CollectionForm, ItemsList, VueMarkdown},
   data() {
     return {
-      allTags: [],
       currCollection: {title: '', pic: '', description: '', theme: {text: ''}, user: {name: ''}},
       values: []
     }
   },
+
   created() {
-    collectionApi.getAllTags().then(res => {
-      res.json().then(tags => {
-        tags.forEach(t => {
-          this.allTags.push({text: t.name, value: t.id})
-        })
-      })
-    })
     collectionApi.getCollection(this.$route.params.id).then(res => {
       res.json().then(collection => {
         this.currCollection = collection

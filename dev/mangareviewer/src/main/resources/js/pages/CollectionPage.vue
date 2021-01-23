@@ -30,7 +30,6 @@
       </v-col>
     </v-row>
 
-
     <v-row>
       <v-col class="col-12 col-md-6 col-lg-6 col-xl-6">
         <v-card>
@@ -61,7 +60,7 @@
       <v-col class="col-12 col-md-6 col-lg-6 col-xl-6">
         <collection-form
             :currentCollection="currCollection"
-            :valuesList="values"
+            :itemAttr="item"
         ></collection-form>
       </v-col>
     </v-row>
@@ -70,6 +69,8 @@
       <v-col>
         <items-list
             :collection="currCollection"
+            :updateItem="setUpdateForm"
+            :deleteItem="removeItem"
         ></items-list>
       </v-col>
     </v-row>
@@ -87,20 +88,33 @@ export default {
   data() {
     return {
       currCollection: {title: '', pic: '', description: '', theme: {text: ''}, user: {name: ''}},
-      values: []
+      item: null,
     }
   },
-
   created() {
+    this.$store.dispatch('tag/getAllTagsAction')
     collectionApi.getCollection(this.$route.params.id).then(res => {
       res.json().then(collection => {
         this.currCollection = collection
-        this.currCollection.fields.forEach(field => {
-          this.values.push({id: field.id, value: ''})
-        })
       })
     })
   },
+  methods: {
+    setUpdateForm(item) {
+      this.item = {
+        id: item.id,
+        title: item.title,
+        tags: item.tags,
+        values: this.currCollection.fields.map(f => {
+          return {id: f.id, value: item[f.text.toLowerCase()]}
+        })
+      }
+      this.$store.dispatch('alert/activateAlertAction', {message: "Update selected item!", type: 'info'})
+    },
+    removeItem(item) {
+      this.$store.dispatch('item/deleteItemAction', item)
+    }
+  }
 }
 </script>
 

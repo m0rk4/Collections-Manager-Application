@@ -18,20 +18,49 @@ export default {
             state.collectionItems = [
                 ...newItems
             ]
-            console.log(state.collectionItems)
+        },
+        updateItemMutation(state, updatedItem) {
+            const index = state.collectionItems.findIndex(i => i.id === updatedItem.id)
+            if (index > -1) {
+                state.collectionItems = [
+                    ...state.collectionItems.splice(0, index),
+                    updatedItem,
+                    ...state.collectionItems.splice(index + 1)
+                ]
+            }
+        },
+        deleteItemMutation(state, deletedItem) {
+            const index = state.collectionItems.findIndex(i => i.id === deletedItem.id)
+            if (index > -1) {
+                state.collectionItems = [
+                    ...state.collectionItems.splice(0, index),
+                    ...state.collectionItems.splice(index + 1)
+                ]
+            }
         }
     },
     actions: {
-        addNewItemAction({commit, state}, itemToAdd) {
+        addNewItemAction({commit}, itemToAdd) {
             itemApi.addNewItem(itemToAdd).then(res => {
                 res.json().then(savedItem => {
                     commit('addNewItemMutation', savedItem)
-                    commit(
-                        'tag/addTagsMutation',
-                        extractNewTags(savedItem.tags, itemToAdd.tags),
-                        {root: true}
-                    )
+                    commit('tag/addTagsMutation',
+                        extractNewTags(savedItem.tags, itemToAdd.tags), {root: true})
                 })
+            })
+        },
+        updateItemAction({commit}, itemToUpdate) {
+            itemApi.updateItem(itemToUpdate).then(res => {
+                res.json().then(updatedItem => {
+                    commit('updateItemMutation', updatedItem)
+                })
+            })
+        },
+        deleteItemAction({commit}, itemToDelete) {
+            itemApi.deleteItem(itemToDelete.id).then(res => {
+                if (res.ok) {
+                    commit('deleteItemMutation', itemToDelete)
+                }
             })
         }
     }

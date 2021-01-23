@@ -65,7 +65,7 @@
 import {mapGetters} from "vuex";
 
 export default {
-  props: ['currentCollection', 'valuesList'],
+  props: ['currentCollection', 'itemAttr'],
   data() {
     return {
       titleRules: [
@@ -73,8 +73,8 @@ export default {
         v => (v && v.length <= 50) || 'Title must be less than 50 characters',
       ],
       textMDRules: [
-          v => !!v || 'Required',
-          v => (v && v.length <= 255) || 'Length must be less than 255 characters'
+        v => !!v || 'Required',
+        v => (v && v.length <= 255) || 'Length must be less than 255 characters'
       ],
       textRules: [
         v => !!v || 'Required',
@@ -83,49 +83,63 @@ export default {
       valid: true,
       title: '',
       selectedTags: [],
-      currCollection: this.currentCollection,
-      values: this.valuesList
+      currCollection: {},
+      values: [],
+      id: null,
+      options: {
+        duration: 700,
+        offset: 75,
+        easing: 'easeInOutCubic',
+      },
     }
-  },
-  created() {
-    this.$store.dispatch('tag/getAllTagsAction')
   },
   computed: {
     ...mapGetters('tag', ['allTagsAsChips'])
   },
   watch: {
+    itemAttr: function (newVal) {
+      this.id = newVal.id
+      this.selectedTags = newVal.tags
+      this.title = newVal.title
+      this.values = newVal.values
+      this.$vuetify.goTo(this.$refs.collectionForm, this.options)
+    },
     currentCollection: function (newVal) {
       this.currCollection = newVal
+      this.values = newVal.fields.map(f => {
+        return {id: f.id, value: ''}
+      })
     },
-    valuesList: function (newVal) {
-      this.values = newVal
-    }
   },
   methods: {
     addItem() {
       if (!this.$refs.collectionForm.validate())
         return
-      let tags = []
+      let tags = [], values = []
       this.selectedTags.forEach(t => {
         if (t.value) tags.push({id: t.value, name: t.text})
         else tags.push({id: null, name: t})
       })
 
-      let values = []
       this.values.forEach(v => {
         var fId = this.currCollection.fields.findIndex(f => f.id === v.id)
         values.push({value: v.value, field: this.currCollection.fields[fId]})
       })
 
       const item = {
+        id: this.id,
         title: this.title,
         tags: tags,
         collection: {id: this.currCollection.id},
         values: values
       }
-      console.log('New Item:')
+      console.log('NewItem:')
       console.log(item)
-      this.$store.dispatch('item/addNewItemAction', item)
+      if (this.id)
+        this.$store.dispatch('item/updateItemAction', item)
+      else
+        this.$store.dispatch('item/addNewItemAction', item)
+      this.id = null
       this.$refs.collectionForm.reset()
     }
   }

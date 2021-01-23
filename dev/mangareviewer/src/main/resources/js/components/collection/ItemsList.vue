@@ -77,10 +77,10 @@
               <v-card-title class="subheading font-weight-bold">
                 <v-btn text rounded>{{ item.title }}</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn icon @click="updateItem">
+                <v-btn icon @click="updateItem(item)">
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
-                <v-btn icon>
+                <v-btn icon @click="deleteItem(item)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </v-card-title>
@@ -201,7 +201,7 @@ import VueMarkdown from "vue-markdown/src/VueMarkdown";
 
 export default {
   components: {VueMarkdown},
-  props: ['collection'],
+  props: ['collection', 'updateItem', 'deleteItem'],
   data() {
     return {
       currCollection: this.collection,
@@ -211,16 +211,15 @@ export default {
       sortDesc: false,
       page: 1,
       itemsPerPage: 4,
-      sortBy: 'name',
+      sortBy: '',
       keys: [],
     }
   },
   watch: {
     collection: function (newVal) {
       this.currCollection = newVal
-      this.keys.push('Title')
-      this.currCollection.fields.forEach(f => this.keys.push(f.text))
-      this.$store.commit('item/setCollectionItemsMutation', this.currCollection.items)
+      this.keys = newVal.fields.map(f => f.text)
+      this.$store.commit('item/setCollectionItemsMutation', newVal.items)
     }
   },
   computed: {
@@ -264,7 +263,6 @@ export default {
     updateItemsPerPage(number) {
       this.itemsPerPage = number
     },
-    updateItem() {}
   },
 }
 </script>

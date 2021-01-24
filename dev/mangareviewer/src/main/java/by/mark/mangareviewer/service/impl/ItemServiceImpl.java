@@ -20,4 +20,14 @@ public class ItemServiceImpl implements ItemService {
     public Item addNewItem(Item toAddItem) {
         return itemRepo.save(toAddItem);
     }
+
+    @Override
+    public void deleteItem(Item itemToDelete) {
+        itemRepo.delete(itemToDelete);
+    }
+
+    @Override
+    public Item updateItem(Item itemToUpdate) {
+        return itemRepo.save(itemToUpdate);
+    }
 }

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ValueService {
     List<Value> saveAllValues(Iterable<Value> valuesToSave);
+    void deleteValues(Iterable<Value> valuesToDelete);
 }

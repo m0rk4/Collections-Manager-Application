@@ -81,7 +81,6 @@ public class CollectionController {
             @PathVariable("id") Collection collectionFromDb,
             @RequestBody Collection updatedCollection
     ) {
-        collectionFromDb.getFields().clear();
         collectionFromDb.setFields(new HashSet<>(fieldService.saveFields(updatedCollection.getFields())));
         BeanUtils.copyProperties(updatedCollection, collectionFromDb, "id", "user", "fields");
         return collectionService.saveCollection(collectionFromDb);

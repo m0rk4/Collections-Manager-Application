@@ -23,9 +23,9 @@ export default {
             const index = state.collectionItems.findIndex(i => i.id === updatedItem.id)
             if (index > -1) {
                 state.collectionItems = [
-                    ...state.collectionItems.splice(0, index),
+                    ...state.collectionItems.slice(0, index),
                     updatedItem,
-                    ...state.collectionItems.splice(index + 1)
+                    ...state.collectionItems.slice(index + 1)
                 ]
             }
         },
@@ -33,8 +33,8 @@ export default {
             const index = state.collectionItems.findIndex(i => i.id === deletedItem.id)
             if (index > -1) {
                 state.collectionItems = [
-                    ...state.collectionItems.splice(0, index),
-                    ...state.collectionItems.splice(index + 1)
+                    ...state.collectionItems.slice(0, index),
+                    ...state.collectionItems.slice(index + 1)
                 ]
             }
         }

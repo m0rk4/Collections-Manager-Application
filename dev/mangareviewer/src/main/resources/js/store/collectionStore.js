@@ -22,8 +22,8 @@ export default {
             const indexToDelete = state.userCollections.findIndex(el => el.id === collection.id)
             if (indexToDelete > -1) {
                 state.userCollections = [
-                    ...state.userCollections.splice(0, indexToDelete),
-                    ...state.userCollections.splice(indexToDelete + 1)
+                    ...state.userCollections.slice(0, indexToDelete),
+                    ...state.userCollections.slice(indexToDelete + 1)
                 ]
             }
         },
@@ -31,9 +31,9 @@ export default {
             const indexToReplace = state.userCollections.findIndex(el => el.id === updatedCollection.id)
             if (indexToReplace > -1) {
                 state.userCollections = [
-                    ...state.userCollections.splice(0, indexToReplace),
+                    ...state.userCollections.slice(0, indexToReplace),
                     updatedCollection,
-                    ...state.userCollections.splice(indexToReplace + 1)
+                    ...state.userCollections.slice(indexToReplace + 1)
                 ]
             }
         }

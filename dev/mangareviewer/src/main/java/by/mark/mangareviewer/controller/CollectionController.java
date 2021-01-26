@@ -65,9 +65,7 @@ public class CollectionController {
             @AuthenticationPrincipal User basicUser
     ) {
         User currentUser = authService.getCurrentUser(basicUser, oAuth2User);
-        collection.setFields(new HashSet<>(fieldService.saveFields(collection.getFields())));
-        collection.setUser(currentUser);
-        return collectionService.addNewCollection(collection);
+        return collectionService.addNewCollection(collection, currentUser);
     }
 
     @DeleteMapping("{id}")
@@ -81,9 +79,7 @@ public class CollectionController {
             @PathVariable("id") Collection collectionFromDb,
             @RequestBody Collection updatedCollection
     ) {
-        collectionFromDb.setFields(new HashSet<>(fieldService.saveFields(updatedCollection.getFields())));
-        BeanUtils.copyProperties(updatedCollection, collectionFromDb, "id", "user", "fields");
-        return collectionService.saveCollection(collectionFromDb);
+        return collectionService.saveCollection(collectionFromDb, updatedCollection);
     }
 
     @GetMapping("{id}")

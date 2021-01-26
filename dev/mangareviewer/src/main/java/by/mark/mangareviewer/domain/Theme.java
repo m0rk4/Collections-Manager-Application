@@ -16,9 +16,10 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(of = {"id"})
 public class Theme {
-    @JsonView(Views.Id.class)
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Views.Id.class)
     private Long id;
     @JsonView(Views.IdName.class)
     private String text;

@@ -8,6 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -23,10 +25,10 @@ public class AuthServiceImpl implements AuthService {
             @AuthenticationPrincipal OAuth2User oAuth2User
     ) {
         String id = basicUser != null ? basicUser.getId() :
-                oAuth2User != null ? oAuth2User.getName() :
-                null;
-        if (id != null)
+                oAuth2User != null ? oAuth2User.getName() : null;
+        if (id != null) {
             return userService.findById(id).orElse(null);
+        }
         return null;
     }
 

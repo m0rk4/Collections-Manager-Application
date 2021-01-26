@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
     private final UserDetailsRepo userDetailsRepo;
     private final PasswordEncoder passwordEncoder;
 
-
     @Autowired
     public UserServiceImpl(UserDetailsRepo userDetailsRepo, PasswordEncoder passwordEncoder) {
         this.userDetailsRepo = userDetailsRepo;
@@ -37,11 +36,13 @@ public class UserServiceImpl implements UserService {
         User user = userDetailsRepo.findByName(username);
         if (user == null) {
             user = userDetailsRepo.findByEmail(username);
-            if (user == null)
+            if (user == null) {
                 throw new UsernameNotFoundException("User with such login or email do not exists");
+            }
         }
-        if (user.getPassword() == null)
+        if (user.getPassword() == null) {
             throw new UsernameNotFoundException("User with such login or email do not exists");
+        }
         return user;
     }
 
@@ -58,8 +59,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean addNewUser(User user) {
         User userFromDbLogin = userDetailsRepo.findByName(user.getName());
-        if (userFromDbLogin != null)
+        if (userFromDbLogin != null) {
             return false;
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setId(UUID.randomUUID().toString());
         user.setRoles(Collections.singleton(Role.USER));
@@ -120,7 +122,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private List<User> getUsersFromDbById(List<User> usersDto){
+    private List<User> getUsersFromDbById(List<User> usersDto) {
         return userDetailsRepo.findAllById(
                 usersDto.stream()
                         .map(User::getId)

@@ -6,7 +6,6 @@ import by.mark.mangareviewer.service.AuthService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-@Slf4j
 public class MainController {
 
     private final AuthService authService;
@@ -40,9 +38,8 @@ public class MainController {
     ) throws JsonProcessingException {
         User currentUser = authService.getCurrentUser(basicUser, oAuth2User);
         String serializedUser = profileWriter.writeValueAsString(currentUser);
-        log.debug(serializedUser);
+
         model.addAttribute("profile", serializedUser);
-        log.info("IN MAIN CONTROLLER: {}", currentUser);
         model.addAttribute("isDevMode", "dev".equals(activeProfile));
         return "index";
     }

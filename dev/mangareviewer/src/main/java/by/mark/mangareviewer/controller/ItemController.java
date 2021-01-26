@@ -27,32 +27,21 @@ public class ItemController {
 
     private final AuthService authService;
     private final ItemService itemService;
-    private final TagService tagService;
-    private final ValueService valueService;
 
     @Autowired
-    public ItemController(AuthService authService, ItemService itemService, TagService tagService, ValueService valueService) {
+    public ItemController(AuthService authService, ItemService itemService) {
         this.authService = authService;
         this.itemService = itemService;
-        this.tagService = tagService;
-        this.valueService = valueService;
     }
 
     @PostMapping
     @JsonView(Views.IdName.class)
     public Item addNewItem(@RequestBody Item item) {
-        item.setTags(new HashSet<>(tagService.saveAllTags(item.getTags())));
-        Item savedItem = itemService.addNewItem(item);
-        Set<Value> itemValues = item.getValues();
-        itemValues.forEach(v -> v.setItem(savedItem));
-        savedItem.setValues(new HashSet<>(valueService.saveAllValues(itemValues)));
-        return savedItem;
+        return itemService.addNewItem(item);
     }
 
     @DeleteMapping("{id}")
     public void deleteItem(@PathVariable("id") Item item) {
-        item.getTags().clear();
-        valueService.deleteValues(item.getValues());
         itemService.deleteItem(item);
     }
 
@@ -62,22 +51,7 @@ public class ItemController {
             @PathVariable("id") Item itemFromDb,
             @RequestBody Item toUpdateItem
     ) {
-        itemFromDb.setTags(new HashSet<>(tagService.saveAllTags(toUpdateItem.getTags())));
-        toUpdateItem.getValues().forEach(uv -> {
-            Long fieldId = uv.getField().getId();
-            Optional<Value> first = itemFromDb.getValues().stream()
-                    .filter(v -> v.getField().getId().equals(fieldId))
-                    .findFirst();
-            if (first.isPresent()) {
-                Value value = first.get();
-                value.setValue(uv.getValue());
-            } else {
-                uv.setItem(itemFromDb);
-                itemFromDb.getValues().add(valueService.saveValue(uv));
-            }
-        });
-        BeanUtils.copyProperties(toUpdateItem, itemFromDb, "id", "tags", "values", "comments");
-        return itemService.updateItem(itemFromDb);
+        return itemService.updateItem(itemFromDb, toUpdateItem);
     }
 
     @PostMapping("{id}/like")

@@ -54,7 +54,7 @@ public class Collection {
     @JsonView(Views.FullCollection.class)
     private Set<Field> fields = new HashSet<>();
 
-    @OneToMany(mappedBy = "collection")
+    @OneToMany(mappedBy = "collection", orphanRemoval = true)
     @JsonView(Views.FullCollection.class)
     private List<Item> items = new LinkedList<>();
 }

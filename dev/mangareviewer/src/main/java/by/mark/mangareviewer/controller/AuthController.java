@@ -42,19 +42,19 @@ public class AuthController {
             @RequestBody @Valid RegistrationFormDto userDto,
             BindingResult bindingResult
     ) {
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(
                     ControllerUtils.getValidationErrors(bindingResult),
-                    HttpStatus.OK);
+                    HttpStatus.OK
+            );
+        }
 
-        return userService.addNewUser(userDto.toUser())
-                ?
-                new ResponseEntity<>(
-                        HttpStatus.OK)
-                :
+        return userService.addNewUser(userDto.toUser()) ?
+                new ResponseEntity<>(HttpStatus.OK) :
                 new ResponseEntity<>(
                         ControllerUtils.getDefaultAuthErrorMessage(),
-                        HttpStatus.OK);
+                        HttpStatus.OK
+                );
     }
 
     @PostMapping("signin")

@@ -71,6 +71,4 @@ public class Item {
     @OneToMany(mappedBy = "item", orphanRemoval = true)
     @JsonView(Views.IdName.class)
     private List<Comment> comments = new LinkedList<>();
-
-
 }

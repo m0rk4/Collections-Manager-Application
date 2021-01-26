@@ -23,8 +23,12 @@ public class MyCustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        UserDetails userDetails = userService.loadUserByUsername(authentication.getName());
-        if (authentication.getCredentials().equals(userDetails.getPassword())) {
+        String authName = authentication.getName();
+        UserDetails userDetails = userService.loadUserByUsername(authName);
+        String password = userDetails.getPassword();
+
+        Object authenticationCredentials = authentication.getCredentials();
+        if (authenticationCredentials.equals(password)) {
             if (userDetails.isAccountNonLocked()) {
                 return getUsernamePasswordAuthenticationToken(authentication, userDetails);
             } else {
@@ -36,7 +40,8 @@ public class MyCustomAuthenticationProvider implements AuthenticationProvider {
     }
 
     private UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(
-            Authentication authentication, UserDetails userDetails
+            Authentication authentication,
+            UserDetails userDetails
     ) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(

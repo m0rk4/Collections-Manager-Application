@@ -27,7 +27,7 @@ public class WsSender {
                 .writerWithView(view);
 
         return (EventType eventType, T payload) -> {
-            String value = null;
+            String value;
             try {
                 value = objectWriter.writeValueAsString(payload);
             } catch (JsonProcessingException e) {

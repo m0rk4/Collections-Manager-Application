@@ -30,6 +30,12 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Modified original Spring class for my needs.
+ * Almost the same as original.
+ * Except of adding opportunity to check if OAuth2Users are locked.
+ */
+
 @Service
 public class MyCustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private static final String MISSING_USER_INFO_URI_ERROR_CODE = "missing_user_info_uri";
@@ -40,8 +46,9 @@ public class MyCustomOAuth2UserService implements OAuth2UserService<OAuth2UserRe
 
     private static final String ACCOUNT_IS_LOCKED = "account_is_locked";
 
-    private static final ParameterizedTypeReference<Map<String, Object>> PARAMETERIZED_RESPONSE_TYPE = new ParameterizedTypeReference<Map<String, Object>>() {
-    };
+    private static final ParameterizedTypeReference<Map<String, Object>> PARAMETERIZED_RESPONSE_TYPE =
+            new ParameterizedTypeReference<Map<String, Object>>() {
+            };
 
     private final UserService userService;
 
@@ -75,7 +82,7 @@ public class MyCustomOAuth2UserService implements OAuth2UserService<OAuth2UserRe
         ResponseEntity<Map<String, Object>> response;
         try {
             // OAuth2UserRequestEntityConverter cannot return null values.
-            //noinspection ConstantConditions
+            // noinspection ConstantConditions
             response = this.restOperations.exchange(requestEntityConverter.convert(userRequest), PARAMETERIZED_RESPONSE_TYPE);
         } catch (OAuth2AuthorizationException ex) {
             OAuth2Error oauth2Error = ex.getError();
@@ -105,15 +112,14 @@ public class MyCustomOAuth2UserService implements OAuth2UserService<OAuth2UserRe
 
         User user = userService.updateOAuth2User(userAttributes, authorities);
 
-        if (user.isNonLocked())
+        if (user.isNonLocked()) {
             return new DefaultOAuth2User(authorities, userAttributes, userNameAttributeName);
-        else {
+        } else {
             OAuth2Error oauth2Error = new OAuth2Error(
                     ACCOUNT_IS_LOCKED,
                     "Your account is locked: ", null);
             throw new OAuth2AuthenticationException(oauth2Error, oauth2Error.toString());
         }
-
     }
 
     private RestTemplate createRestTemplate() {

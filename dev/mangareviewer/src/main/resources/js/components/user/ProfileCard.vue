@@ -1,8 +1,7 @@
 <template>
   <v-card>
     <v-avatar
-        class="profile"
-        color="grey"
+        color="indigo"
         width="100%"
         height="100%"
         tile

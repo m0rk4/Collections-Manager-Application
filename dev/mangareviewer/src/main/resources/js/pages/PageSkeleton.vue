@@ -18,8 +18,8 @@
         <v-btn text
                rounded
                class="mx-2"
-        @click="$router.push('/user')"
-        :disabled="$router.currentRoute.path === '/user'"
+               @click="$router.push('/user')"
+               :disabled="$router.currentRoute.path === '/user'"
         >
           <v-avatar size="36" class="mr-1">
             <img :src="profile.userpic">
@@ -64,7 +64,8 @@
 <script>
 import LoginDialog from "components/auth/LoginDialog.vue";
 import RegisterDialog from "components/auth/RegisterDialog.vue";
-import {mapState, mapGetters} from 'vuex'
+import {mapState, mapGetters, mapMutations} from 'vuex'
+import {addHandler} from "util/ws";
 
 export default {
   components: {LoginDialog, RegisterDialog},
@@ -78,6 +79,36 @@ export default {
     ...mapGetters('auth', [
       'isAdmin',
     ])
+  },
+  methods: {
+    ...mapMutations('item', ['addCommentMutation', 'updateItemMutation'])
+  },
+  created() {
+    addHandler(data => {
+          if (data.objectType === 'COMMENT') {
+            switch (data.eventType) {
+              case 'CREATE':
+                this.addCommentMutation(data.body)
+                break
+              default:
+                console.error(`Incorrect evType: ${data.eventType}`)
+            }
+          } else if (data.objectType === 'LIKE') {
+            switch (data.eventType) {
+              case 'CREATE':
+                this.updateItemMutation(data.body)
+                break
+              case 'REMOVE':
+                this.updateItemMutation(data.body)
+                break
+              default:
+                console.error(`Incorrect evType: ${data.eventType}`)
+            }
+          } else {
+            console.error(`Incorrect objType: ${data.objectType}`)
+          }
+        }
+    )
   }
 }
 </script>

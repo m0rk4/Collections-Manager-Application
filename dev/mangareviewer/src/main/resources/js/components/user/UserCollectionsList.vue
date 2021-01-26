@@ -26,13 +26,10 @@
                   ></v-img>
                 </v-avatar>
                 <v-divider></v-divider>
-                <v-card-title>
-                  <v-btn
-                      text
-                      @click="$router.push({path: `collection/${c.id}`})"
-                  >
+                <v-card-title
+                    @click="$router.push({path: `collection/${c.id}`})"
+                    class="collectionTitle">
                     {{ c.title }}
-                  </v-btn>
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-card-text>
@@ -88,6 +85,9 @@ export default {
 </script>
 
 <style scoped>
+.collectionTitle {
+  cursor: pointer;
+}
 .scroller {
   overflow-x: auto;
   display: flex;
@@ -99,7 +99,7 @@ export default {
 }
 
 .scroller-item-props {
-  width: 158px;
+  width: 200px;
   position: relative !important;
 }
 </style>

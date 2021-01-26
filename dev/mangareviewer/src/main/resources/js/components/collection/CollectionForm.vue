@@ -54,10 +54,13 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <v-btn @click="addItem" rounded outlined>Submit</v-btn>
         </v-form>
       </v-container>
     </v-card-text>
+    <v-card-actions>
+      <v-btn @click="addItem" rounded outlined>Submit</v-btn>
+      <v-btn @click="cancelItem" v-if="id" rounded outlined>Cancel</v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -139,6 +142,10 @@ export default {
         this.$store.dispatch('item/updateItemAction', item)
       else
         this.$store.dispatch('item/addNewItemAction', item)
+      this.id = null
+      this.$refs.collectionForm.reset()
+    },
+    cancelItem() {
       this.id = null
       this.$refs.collectionForm.reset()
     }

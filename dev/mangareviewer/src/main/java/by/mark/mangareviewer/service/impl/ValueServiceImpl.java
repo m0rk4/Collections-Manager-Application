@@ -24,6 +24,11 @@ public class ValueServiceImpl implements ValueService {
     }
 
     @Override
+    public Value saveValue(Value valueToSave) {
+        return valueRepo.save(valueToSave);
+    }
+
+    @Override
     public void deleteValues(Iterable<Value> valuesToDelete) {
         valueRepo.deleteAll(valuesToDelete);
     }

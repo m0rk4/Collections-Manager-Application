@@ -1,5 +1,6 @@
 package by.mark.mangareviewer.domain.user;
 
+import by.mark.mangareviewer.domain.Item;
 import by.mark.mangareviewer.domain.Views;
 import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
@@ -41,7 +42,10 @@ public class User implements UserDetails, Serializable {
 
     @JsonView(Views.IdName.class)
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "usr_id"))
+    @CollectionTable(
+            name = "usr_role",
+            joinColumns = @JoinColumn(name = "usr_id")
+    )
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 

@@ -1,12 +1,15 @@
 import itemApi from "api/itemApi"
-import {extractNewTags} from "util/util";
+import commentApi from "api/commentApi";
+import {extractNewTags} from "util/util"
 
 export default {
     namespaced: true,
     state: () => ({
         collectionItems: []
     }),
-    getters: {},
+    getters: {
+
+    },
     mutations: {
         addNewItemMutation(state, savedItem) {
             state.collectionItems = [
@@ -15,11 +18,13 @@ export default {
             ]
         },
         setCollectionItemsMutation(state, newItems) {
+            console.log(newItems)
             state.collectionItems = [
                 ...newItems
             ]
         },
         updateItemMutation(state, updatedItem) {
+            console.log(updatedItem)
             const index = state.collectionItems.findIndex(i => i.id === updatedItem.id)
             if (index > -1) {
                 state.collectionItems = [
@@ -35,6 +40,24 @@ export default {
                 state.collectionItems = [
                     ...state.collectionItems.slice(0, index),
                     ...state.collectionItems.slice(index + 1)
+                ]
+            }
+        },
+        addCommentMutation(state, comment) {
+            const indexToUpdate = state.collectionItems.findIndex(i => i.id === comment.item.id)
+            const item = state.collectionItems[indexToUpdate]
+
+            if (!item.comments.find(it => it.id === comment.id)) {
+                state.collectionItems = [
+                    ...state.collectionItems.slice(0, indexToUpdate),
+                    {
+                        ...item,
+                        comments: [
+                            ...item.comments,
+                            comment
+                        ]
+                    },
+                    ...state.collectionItems.slice(indexToUpdate + 1)
                 ]
             }
         }
@@ -61,6 +84,13 @@ export default {
                 if (res.ok) {
                     commit('deleteItemMutation', itemToDelete)
                 }
+            })
+        },
+        addCommentAction({commit}, comment) {
+            commentApi.addNewComment(comment).then(res => {
+                res.json().then(savedComment => {
+                    commit('addCommentMutation', comment)
+                })
             })
         }
     }

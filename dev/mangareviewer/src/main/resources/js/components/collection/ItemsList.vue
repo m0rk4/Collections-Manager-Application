@@ -69,22 +69,21 @@
               v-for="item in props.items"
               :key="item.title"
               cols="12"
-              sm="6"
-              md="4"
-              lg="3"
+              md="6"
+              lg="4"
           >
             <v-card>
-              <v-card-title class="subheading font-weight-bold">
+              <v-card-title class="font-weight-bold">
                 <v-btn text rounded>{{ item.title }}</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn icon @click="updateItem(item)">
-                  <v-icon>mdi-pencil</v-icon>
+                <v-btn icon v-if="youLiked(item.likers)" @click="processLike(item.id)">
+                  <v-icon>mdi-thumb-up</v-icon>
                 </v-btn>
-                <v-btn icon @click="deleteItem(item)">
-                  <v-icon>mdi-delete</v-icon>
+                <v-btn icon v-else @click="processLike(item.id)">
+                  <v-icon>mdi-thumb-up-outline</v-icon>
                 </v-btn>
+                {{ item.likers.length }}
               </v-card-title>
-
               <v-divider></v-divider>
               <v-card-text>
                 <v-container fluid>
@@ -112,19 +111,47 @@
                       </v-list-item-content>
                     </v-list-item>
                   </v-list>
-                  <v-combobox
-                      v-model="item['tags']"
-                      small-chips
-                      chips
-                      multiple
-                      persistent-hint
-                      single-line
-                      readonly
-                      dense
-                  >
-                  </v-combobox>
+                  <v-container fluid>
+                    <v-btn
+                        class="my-2 mx-1"
+                        rounded
+                        small
+                        depressed
+                        v-for="tag in item.tags"
+                        :key="String(tag.value)"
+                    >
+                      {{ tag.text }}
+                    </v-btn>
+                  </v-container>
+                  <!--                  <v-combobox-->
+                  <!--                      v-model="item['tags']"-->
+                  <!--                      label="Tags"-->
+                  <!--                      small-chips-->
+                  <!--                      chips-->
+                  <!--                      multiple-->
+                  <!--                      persistent-hint-->
+                  <!--                      single-line-->
+                  <!--                      readonly-->
+                  <!--                      dense-->
+                  <!--                  >-->
+                  <!--                  </v-combobox>-->
                 </v-container>
               </v-card-text>
+              <v-divider></v-divider>
+              <v-card-actions>
+                <v-btn icon @click="updateItem(item)">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn icon @click="deleteItem(item)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </v-card-actions>
+              <v-divider></v-divider>
+
+              <comment-list
+                  :itemId="item.id"
+                  :comments="item.comments"
+              ></comment-list>
             </v-card>
           </v-col>
         </v-row>
@@ -195,12 +222,14 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
-import VueMarkdown from "vue-markdown/src/VueMarkdown";
+import {mapState} from "vuex"
+import VueMarkdown from "vue-markdown/src/VueMarkdown"
+import CommentList from "components/comment/CommentList.vue"
+import itemApi from "api/itemApi";
 
 
 export default {
-  components: {VueMarkdown},
+  components: {CommentList, VueMarkdown},
   props: ['collection', 'updateItem', 'deleteItem'],
   data() {
     return {
@@ -223,7 +252,10 @@ export default {
     }
   },
   computed: {
-    ...mapState({collectionItems: state => state.item.collectionItems}),
+    ...mapState({
+      collectionItems: state => state.item.collectionItems,
+      profile: state => state.auth.profile,
+    }),
     numberOfPages() {
       return Math.ceil(this.collectionItems.length / this.itemsPerPage)
     },
@@ -233,14 +265,19 @@ export default {
     itemsToDisplay() {
       const displayItems = []
       this.collectionItems.forEach(i => {
+        console.log(i)
         var obj = {}
         obj['id'] = i.id
-        obj['tags'] = i.tags.map(t => {return {text: t.name, value: t.id}})
         obj['title'] = i.title
+        obj['comments'] = i.comments
+        obj['likers'] = i.likers
+        obj['tags'] = i.tags.map(t => {
+          return {text: t.name, value: t.id}
+        })
         this.keys.forEach(k => {
           if (k !== 'Title') {
             const id = i.values.findIndex(val => val.field.text === k)
-            obj[k.toLowerCase()] = i.values[id].value
+            obj[k.toLowerCase()] = i.values[id] ? i.values[id].value : ''
           }
         })
         displayItems.push(obj)
@@ -263,6 +300,14 @@ export default {
     updateItemsPerPage(number) {
       this.itemsPerPage = number
     },
+    processLike(id) {
+      itemApi.likeItem(id).then(res => {
+        console.log(res)
+      })
+    },
+    youLiked(likers) {
+      return likers.filter(l => l.id === this.profile.id).length
+    }
   },
 }
 </script>

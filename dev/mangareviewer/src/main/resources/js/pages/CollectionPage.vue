@@ -6,7 +6,7 @@
           <v-card-text>
             <v-container fluid>
               <v-parallax
-                  height="300"
+                  height="350"
                   dark
                   :src="currCollection.pic"
               >
@@ -58,10 +58,10 @@
         </v-card>
       </v-col>
       <v-col class="col-12 col-md-6 col-lg-6 col-xl-6">
-        <collection-form
+        <item-form
             :currentCollection="currCollection"
             :itemAttr="item"
-        ></collection-form>
+        ></item-form>
       </v-col>
     </v-row>
 
@@ -79,12 +79,12 @@
 
 <script>
 import collectionApi from "api/collectionApi";
-import CollectionForm from "components/collection/CollectionForm.vue";
+import ItemForm from "components/collection/ItemForm.vue";
 import ItemsList from "components/collection/ItemsList.vue";
-import VueMarkdown from "vue-markdown/src/VueMarkdown";
+import VueMarkdown from "vue-markdown/src/VueMarkdown"
 
 export default {
-  components: {CollectionForm, ItemsList, VueMarkdown},
+  components: {ItemForm, ItemsList, VueMarkdown},
   data() {
     return {
       currCollection: {title: '', pic: '', description: '', theme: {text: ''}, user: {name: ''}},

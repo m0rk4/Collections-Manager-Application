@@ -1,6 +1,5 @@
 package by.mark.mangareviewer.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -21,7 +20,7 @@ public class Theme {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.Id.class)
     private Long id;
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     private String text;
 
     @OneToMany(mappedBy = "theme")

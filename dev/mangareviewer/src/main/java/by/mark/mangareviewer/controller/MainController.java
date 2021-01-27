@@ -17,17 +17,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
-    private final AuthService authService;
-
     @Value("${spring.profiles.active}")
     private String activeProfile;
     private final ObjectWriter profileWriter;
+    private final AuthService authService;
 
     @Autowired
     public MainController(AuthService authService, ObjectMapper objectMapper) {
         this.authService = authService;
         objectMapper.setConfig(objectMapper.getSerializationConfig());
-        this.profileWriter = objectMapper.writerWithView(Views.IdName.class);
+        this.profileWriter = objectMapper.writerWithView(Views.IdText.class);
     }
 
     @GetMapping

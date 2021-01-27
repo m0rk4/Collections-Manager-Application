@@ -82,14 +82,18 @@ export default {
       pass: '',
       passRep: '',
       emailRules: [
-        e => !!e || 'Email is required'
+        e => !!e
+            || 'Email is required'
       ],
       loginRules: [
-        v => (v && v.length <= 15 && v.length >= 3) || 'Login must be less than 15 characters and bigger than 3 characters',
+        v => (v && v.length <= 15 && v.length >= 3)
+            || 'Login must be less than 15 characters and bigger than 3 characters',
       ],
       passRules: {
-        len: v => (v && v.length <= 15 && v.length >= 5) || 'Password must be less than 15 characters and bigger than 5 characters',
-        match: () => this.pass === this.passRep || 'Different Passwords'
+        len: v => (v && v.length <= 15 && v.length >= 5)
+            || 'Password must be less than 15 characters and bigger than 5 characters',
+        match: () => this.pass === this.passRep
+            || 'Different Passwords'
       }
     }
   },
@@ -107,12 +111,18 @@ export default {
       if (!this.$refs.registerForm.validate()) return
       authApi.register(this.email, this.login, this.pass).then(res => {
         if (res.body.message) {
-          this.$store.dispatch('alert/activateAlertAction', {message: res.body.message, type: 'error'})
+          this.$store.dispatch(
+              'alert/activateAlertAction',
+              {message: res.body.message, type: 'error'}
+          )
         } else {
           if (this.isDialog)
             this.onClick()
           this.$router.push("/login")
-          this.$store.dispatch('alert/activateAlertAction', {message: 'Successfully registered', type: 'success'})
+          this.$store.dispatch(
+              'alert/activateAlertAction',
+              {message: 'Successfully registered', type: 'success'}
+          )
         }
       })
       this.$refs.registerForm.reset()

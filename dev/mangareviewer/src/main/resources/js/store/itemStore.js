@@ -7,9 +7,7 @@ export default {
     state: () => ({
         collectionItems: []
     }),
-    getters: {
-
-    },
+    getters: {},
     mutations: {
         addNewItemMutation(state, savedItem) {
             state.collectionItems = [
@@ -18,14 +16,14 @@ export default {
             ]
         },
         setCollectionItemsMutation(state, newItems) {
-            console.log(newItems)
             state.collectionItems = [
                 ...newItems
             ]
         },
         updateItemMutation(state, updatedItem) {
-            console.log(updatedItem)
-            const index = state.collectionItems.findIndex(i => i.id === updatedItem.id)
+            const index = state.collectionItems
+                .findIndex(i => i.id === updatedItem.id)
+
             if (index > -1) {
                 state.collectionItems = [
                     ...state.collectionItems.slice(0, index),
@@ -35,7 +33,9 @@ export default {
             }
         },
         deleteItemMutation(state, deletedItem) {
-            const index = state.collectionItems.findIndex(i => i.id === deletedItem.id)
+            const index = state.collectionItems
+                .findIndex(i => i.id === deletedItem.id)
+
             if (index > -1) {
                 state.collectionItems = [
                     ...state.collectionItems.slice(0, index),
@@ -44,7 +44,8 @@ export default {
             }
         },
         addCommentMutation(state, comment) {
-            const indexToUpdate = state.collectionItems.findIndex(i => i.id === comment.item.id)
+            const indexToUpdate = state.collectionItems
+                .findIndex(i => i.id === comment.item.id)
             const item = state.collectionItems[indexToUpdate]
 
             if (!item.comments.find(it => it.id === comment.id)) {

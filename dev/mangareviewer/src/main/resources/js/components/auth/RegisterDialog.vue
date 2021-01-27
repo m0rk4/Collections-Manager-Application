@@ -7,7 +7,10 @@
         Register
       </v-btn>
     </template>
-    <register-form :isDialog="true" :onClose="onClose"></register-form>
+    <register-form
+        :isDialog="true"
+        :onClose="onClose"
+    ></register-form>
   </v-dialog>
 </template>
 

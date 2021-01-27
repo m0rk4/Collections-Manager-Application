@@ -27,18 +27,16 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public Collection addNewCollection(Collection collection, User currentUser) {
+    public Collection addNewCollection(Collection collection) {
         Set<Field> newFields = collection.getFields();
         List<Field> savedFields = fieldService.saveFields(newFields);
         collection.setFields(new HashSet<>(savedFields));
-
-        collection.setUser(currentUser);
         return collectionRepo.save(collection);
     }
 
     @Override
     public List<Collection> getAllUserCollections(User user) {
-        return collectionRepo.findAllByUser(user);
+        return collectionRepo.findAllByUserOrderByCreationDateDesc(user);
     }
 
     @Override

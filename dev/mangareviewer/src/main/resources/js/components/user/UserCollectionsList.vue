@@ -3,9 +3,10 @@
     <v-toolbar flat>
       <v-toolbar-title>User collections</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="$router.push('create-collection')">
-        Create New Collection
-      </v-btn>
+      <collection-dialog
+          v-if="currUser && (userId === currUser.id || isAdmin)"
+          :userId="userId"
+      ></collection-dialog>
     </v-toolbar>
     <v-divider></v-divider>
     <v-card-text>
@@ -27,7 +28,7 @@
                 </v-avatar>
                 <v-divider></v-divider>
                 <v-card-title
-                    @click="$router.push({path: `collection/${c.id}`})"
+                    @click="$router.push({path: `/collection/${c.id}`})"
                     class="collectionTitle">
                     {{ c.title }}
                 </v-card-title>
@@ -38,25 +39,13 @@
                     <div>Author: {{ }}</div>
                   </v-container>
                 </v-card-text>
-                <v-card-actions>
-                  <v-container>
-                    <v-row>
-                      <v-btn
-                          text
-                          color="primary"
-                          @click="$router.push({ path: `/update-collection/${c.id}` })"
-                      >
-                        Update
-                      </v-btn>
+                <v-card-actions v-if="currUser && (userId === currUser.id || isAdmin)">
+                      <collection-dialog :collectionId="c.id"></collection-dialog>
                       <v-btn
                           text
                           color="primary"
                           @click="$store.dispatch('collection/deleteCollectionAction', c)"
-                      >
-                        Delete
-                      </v-btn>
-                    </v-row>
-                  </v-container>
+                      >Delete</v-btn>
                 </v-card-actions>
               </v-card>
             </div>
@@ -68,18 +57,18 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapState, mapGetters} from "vuex";
+import CollectionDialog from "components/user/CollectionDialog.vue"
 
 export default {
-  created() {
-    this.$store.dispatch('collection/getAllUserCollectionsAction',
-        this.$route.params.id || this.currUser.id)
-  },
+  props: ['userId'],
+  components: {CollectionDialog},
   computed: {
     ...mapState({
       userCollections: state => state.collection.userCollections,
       currUser: state => state.auth.profile,
-    })
+    }),
+    ...mapGetters('auth', ['isAdmin'])
   }
 }
 </script>

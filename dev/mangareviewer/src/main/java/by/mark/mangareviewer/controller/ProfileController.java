@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/profile")
-@PreAuthorize("hasAuthority('ADMIN')")
 public class ProfileController {
 
     private final UserService userService;
@@ -22,19 +21,21 @@ public class ProfileController {
         this.userService = userService;
     }
 
-    @GetMapping
-    @JsonView(Views.FullProfile.class)
-    public List<User> usersList() {
-        return userService.findAll();
-    }
-
     @GetMapping("{id}")
-    @JsonView(Views.FullProfile.class)
+    @JsonView(Views.IdText.class)
     public User getUser(@PathVariable("id") User userFromDb) {
         return userFromDb;
     }
 
+    @GetMapping
+    @JsonView(Views.FullProfile.class)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> usersList() {
+        return userService.findAll();
+    }
+
     @PostMapping("deleteUsers")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @JsonView(Views.FullProfile.class)
     public List<User> deleteUsers(@RequestBody List<User> users) {
         userService.deleteUsers(users);
@@ -42,6 +43,7 @@ public class ProfileController {
     }
 
     @PostMapping("makeAdmins")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @JsonView(Views.FullProfile.class)
     public List<User> makeUsersAdmins(@RequestBody List<User> users) {
         userService.updateAdmins(users, true);
@@ -49,6 +51,7 @@ public class ProfileController {
     }
 
     @PostMapping("unmakeAdmins")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @JsonView(Views.FullProfile.class)
     public List<User> unmakeUsersAdmins(@RequestBody List<User> users) {
         userService.updateAdmins(users, false);
@@ -56,6 +59,7 @@ public class ProfileController {
     }
 
     @PostMapping("blockUsers")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @JsonView(Views.FullProfile.class)
     public List<User> blockUsers(@RequestBody List<User> users) {
         userService.updateUsersLocked(users, false);
@@ -63,6 +67,7 @@ public class ProfileController {
     }
 
     @PostMapping("unlockUsers")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @JsonView(Views.FullProfile.class)
     public List<User> unlockUsers(@RequestBody List<User> users) {
         userService.updateUsersLocked(users, true);

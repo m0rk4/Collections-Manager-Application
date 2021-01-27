@@ -29,11 +29,11 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.Id.class)
     private Long id;
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     private String title;
 
     @Column(updatable = false)
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationTime;
 
@@ -52,7 +52,7 @@ public class Item {
             joinColumns = {@JoinColumn(name = "item_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     private Set<Tag> tags = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.ALL})
@@ -61,14 +61,14 @@ public class Item {
             joinColumns = {@JoinColumn(name = "item_id")},
             inverseJoinColumns = {@JoinColumn(name = "liker_id")}
     )
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     private Set<User> likers = new HashSet<>();
 
     @OneToMany(mappedBy = "item")
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     private Set<Value> values = new HashSet<>();
 
     @OneToMany(mappedBy = "item", orphanRemoval = true)
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     private List<Comment> comments = new LinkedList<>();
 }

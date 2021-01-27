@@ -123,22 +123,10 @@
                       {{ tag.text }}
                     </v-btn>
                   </v-container>
-                  <!--                  <v-combobox-->
-                  <!--                      v-model="item['tags']"-->
-                  <!--                      label="Tags"-->
-                  <!--                      small-chips-->
-                  <!--                      chips-->
-                  <!--                      multiple-->
-                  <!--                      persistent-hint-->
-                  <!--                      single-line-->
-                  <!--                      readonly-->
-                  <!--                      dense-->
-                  <!--                  >-->
-                  <!--                  </v-combobox>-->
                 </v-container>
               </v-card-text>
               <v-divider></v-divider>
-              <v-card-actions>
+              <v-card-actions v-if="profile && (author.id === profile.id || isAdmin)">
                 <v-btn icon @click="updateItem(item)">
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
@@ -222,7 +210,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex"
+import {mapState, mapGetters} from "vuex"
 import VueMarkdown from "vue-markdown/src/VueMarkdown"
 import CommentList from "components/comment/CommentList.vue"
 import itemApi from "api/itemApi";
@@ -256,11 +244,15 @@ export default {
       collectionItems: state => state.item.collectionItems,
       profile: state => state.auth.profile,
     }),
+    ...mapGetters('auth', ['isAdmin']),
     numberOfPages() {
       return Math.ceil(this.collectionItems.length / this.itemsPerPage)
     },
     filteredKeys() {
       return this.keys.filter(key => key !== 'Name')
+    },
+    author() {
+      return this.currCollection.user
     },
     itemsToDisplay() {
       const displayItems = []
@@ -301,12 +293,16 @@ export default {
       this.itemsPerPage = number
     },
     processLike(id) {
-      itemApi.likeItem(id).then(res => {
-        console.log(res)
-      })
+      if (this.profile) {
+        itemApi.likeItem(id).then(res => {
+          if (res.ok) {
+            console.log('Like processed')
+          }
+        })
+      }
     },
     youLiked(likers) {
-      return likers.filter(l => l.id === this.profile.id).length
+      return this.profile && likers.filter(l => l.id === this.profile.id).length
     }
   },
 }

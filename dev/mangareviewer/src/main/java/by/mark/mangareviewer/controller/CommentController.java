@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/comment")
-@PreAuthorize("hasAuthority('USER')")
 public class CommentController {
     private final CommentService commentService;
     private final AuthService authService;
@@ -30,6 +29,7 @@ public class CommentController {
 
     @PostMapping
     @JsonView(Views.FullComment.class)
+    @PreAuthorize("hasAuthority('USER')")
     public Comment createComment(
             @RequestBody Comment comment,
             @AuthenticationPrincipal OAuth2User oAuth2User,

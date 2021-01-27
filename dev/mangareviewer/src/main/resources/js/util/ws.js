@@ -1,8 +1,7 @@
 import SockJS from 'sockjs-client'
 import { Stomp } from '@stomp/stompjs'
 
-
-var stompClient = null
+let stompClient = null
 const handlers = []
 
 export function connect() {

@@ -4,6 +4,7 @@ export default {
         profile: profile
     }),
     getters: {
-        isAdmin: state => state.profile.roles.includes('ADMIN'),
+        isAdmin: state =>
+            state.profile ? state.profile.roles.includes('ADMIN'): false,
     }
 }

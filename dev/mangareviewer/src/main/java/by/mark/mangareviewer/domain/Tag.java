@@ -16,9 +16,8 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.Id.class)
     private Long id;
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     private String name;
-
     @ManyToMany(mappedBy = "tags")
     private Set<Item> items = new HashSet<>();
 }

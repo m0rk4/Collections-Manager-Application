@@ -19,7 +19,9 @@ export default {
             ]
         },
         deleteCollectionMutation(state, collection) {
-            const indexToDelete = state.userCollections.findIndex(el => el.id === collection.id)
+            const indexToDelete = state.userCollections
+                .findIndex(el => el.id === collection.id)
+
             if (indexToDelete > -1) {
                 state.userCollections = [
                     ...state.userCollections.slice(0, indexToDelete),
@@ -28,7 +30,9 @@ export default {
             }
         },
         updateCollectionMutation(state, updatedCollection) {
-            const indexToReplace = state.userCollections.findIndex(el => el.id === updatedCollection.id)
+            const indexToReplace = state.userCollections
+                .findIndex(el => el.id === updatedCollection.id)
+
             if (indexToReplace > -1) {
                 state.userCollections = [
                     ...state.userCollections.slice(0, indexToReplace),

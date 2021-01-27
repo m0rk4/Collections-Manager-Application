@@ -17,16 +17,16 @@ public class Comment {
     @JsonView(Views.Id.class)
     private Long id;
 
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     private String text;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @JsonView(Views.IdText.class)
+    private User author;
 
     @ManyToOne
     @JoinColumn(name = "message_id")
     @JsonView(Views.FullComment.class)
     private Item item;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    @JsonView(Views.IdName.class)
-    private User author;
 }

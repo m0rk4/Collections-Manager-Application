@@ -18,9 +18,9 @@ public class Field {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     private String text;
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.IdText.class)
     @JsonProperty(value = "isMarkDownSupported")
     private boolean isMarkDownSupported;
 

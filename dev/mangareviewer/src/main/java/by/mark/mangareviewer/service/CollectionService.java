@@ -6,7 +6,7 @@ import by.mark.mangareviewer.domain.user.User;
 import java.util.List;
 
 public interface CollectionService {
-    Collection addNewCollection(Collection collection, User currentUser);
+    Collection addNewCollection(Collection collection);
 
     List<Collection> getAllUserCollections(User user);
 

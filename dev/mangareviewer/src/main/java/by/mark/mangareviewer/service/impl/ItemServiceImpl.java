@@ -30,7 +30,7 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     public ItemServiceImpl(ItemRepo itemRepo, WsSender wsSender, TagService tagService, ValueService valueService) {
         this.itemRepo = itemRepo;
-        this.wsSender = wsSender.getSender(ObjectType.LIKE, Views.IdName.class);
+        this.wsSender = wsSender.getSender(ObjectType.LIKE, Views.IdText.class);
         this.tagService = tagService;
         this.valueService = valueService;
     }

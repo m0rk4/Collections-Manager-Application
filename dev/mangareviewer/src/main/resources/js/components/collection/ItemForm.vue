@@ -6,6 +6,7 @@
             ref="collectionForm"
             v-model="valid"
             lazy-validation
+            :disabled="!profile || (!(author.id === profile.id) && !isAdmin)"
         >
           <v-text-field
               v-model="title"
@@ -57,7 +58,7 @@
         </v-form>
       </v-container>
     </v-card-text>
-    <v-card-actions>
+    <v-card-actions v-if="profile && (author.id === profile.id || isAdmin)">
       <v-btn @click="addItem" rounded outlined>Submit</v-btn>
       <v-btn @click="cancelItem" v-if="id" rounded outlined>Cancel</v-btn>
     </v-card-actions>
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, mapState} from "vuex";
 
 export default {
   props: ['currentCollection', 'itemAttr'],
@@ -96,8 +97,16 @@ export default {
       },
     }
   },
+
   computed: {
-    ...mapGetters('tag', ['allTagsAsChips'])
+    ...mapGetters('tag', ['allTagsAsChips']),
+    ...mapGetters('auth', ['isAdmin']),
+    ...mapState({
+      profile: state => state.auth.profile,
+    }),
+    author() {
+      return this.currCollection ? this.currCollection.user : {}
+    }
   },
   watch: {
     itemAttr: function (newVal) {

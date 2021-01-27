@@ -3,7 +3,7 @@
     <v-col>
       <v-text-field
           label="New comment"
-          placeholder="Text here..."
+          placeholder="Type text..."
           v-model="text"
           @keyup.enter="saveComment"
       ></v-text-field>
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   props: ['itemId'],
   data() {
@@ -22,15 +24,20 @@ export default {
       text: ''
     }
   },
+  computed: {
+    ...mapState({
+      profile: state => state.auth.profile,
+    })
+  },
   methods: {
     saveComment() {
-      this.$store.dispatch('item/addCommentAction', {
-        text: this.text,
-        item: {
-          id: this.itemId
-        }
-      })
-      this.text = ''
+      if (this.profile) {
+        this.$store.dispatch('item/addCommentAction', {
+          text: this.text,
+          item: {id: this.itemId}
+        })
+        this.text = ''
+      }
     }
   }
 }

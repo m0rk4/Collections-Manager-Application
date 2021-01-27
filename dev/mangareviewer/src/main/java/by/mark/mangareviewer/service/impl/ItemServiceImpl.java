@@ -3,6 +3,7 @@ package by.mark.mangareviewer.service.impl;
 import by.mark.mangareviewer.domain.*;
 import by.mark.mangareviewer.domain.user.User;
 import by.mark.mangareviewer.dto.EventType;
+import by.mark.mangareviewer.dto.ItemPageDto;
 import by.mark.mangareviewer.dto.ObjectType;
 import by.mark.mangareviewer.repo.ItemRepo;
 import by.mark.mangareviewer.service.ItemService;
@@ -11,6 +12,8 @@ import by.mark.mangareviewer.service.ValueService;
 import by.mark.mangareviewer.util.WsSender;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -104,5 +107,14 @@ public class ItemServiceImpl implements ItemService {
         itemRepo.save(item);
     }
 
+    @Override
+    public ItemPageDto findAll(Pageable pageable) {
+        Page<Item> page = itemRepo.findAll(pageable);
+        return new ItemPageDto(
+                page.getContent(),
+                pageable.getPageNumber(),
+                page.getTotalPages()
+        );
+    }
 
 }

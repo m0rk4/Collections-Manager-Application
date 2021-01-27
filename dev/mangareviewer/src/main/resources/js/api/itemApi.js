@@ -3,6 +3,8 @@ import Vue from 'vue'
 const item = Vue.resource('/api/item{/id}')
 
 export default {
+    page: page =>
+        Vue.http.get('/api/item', {params: {page}}),
     addNewItem: itemToAdd =>
         item.save({}, itemToAdd),
     updateItem: itemToUpdate =>

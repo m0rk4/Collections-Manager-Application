@@ -3,9 +3,13 @@ import collectionApi from "api/collectionApi"
 export default {
     namespaced: true,
     state: () => ({
-        userCollections: null,
+        userCollections: [],
+        collections: []
     }),
-    getters: {},
+    getters: {
+        sortedCollections: state =>
+            state.collections.sort((a, b) => -(a.items.length - b.items.length))
+    },
     mutations: {
         addAllUserCollectionsMutation(state, allCollections) {
             state.userCollections = [
@@ -40,13 +44,15 @@ export default {
                     ...state.userCollections.slice(indexToReplace + 1)
                 ]
             }
+        },
+        setAllCollectionsMutation(state, collections) {
+            state.collections = [...collections]
         }
     },
     actions: {
         getAllUserCollectionsAction({commit}, userId) {
             collectionApi.getAllUserCollections(userId).then(res => {
                 res.json().then(allCollections => {
-                    console.log(allCollections)
                     commit('addAllUserCollectionsMutation', allCollections)
                 })
             })
@@ -72,5 +78,12 @@ export default {
                 })
             })
         },
+        getAllCollectionsAction({commit}) {
+            collectionApi.getAllCollections().then(res => {
+                res.json().then(collections => {
+                    commit('setAllCollectionsMutation', collections)
+                })
+            })
+        }
     }
 }

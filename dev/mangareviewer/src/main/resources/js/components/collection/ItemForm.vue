@@ -6,7 +6,7 @@
             ref="collectionForm"
             v-model="valid"
             lazy-validation
-            :disabled="!profile || (!(author.id === profile.id) && !isAdmin)"
+            :disabled="!(profile && ((author && (author.id === profile.id)) || isAdmin))"
         >
           <v-text-field
               v-model="title"
@@ -58,7 +58,7 @@
         </v-form>
       </v-container>
     </v-card-text>
-    <v-card-actions v-if="profile && (author.id === profile.id || isAdmin)">
+    <v-card-actions v-if="profile && ((author && (author.id === profile.id)) || isAdmin)">
       <v-btn @click="addItem" rounded outlined>Submit</v-btn>
       <v-btn @click="cancelItem" v-if="id" rounded outlined>Cancel</v-btn>
     </v-card-actions>
@@ -127,6 +127,7 @@ export default {
     addItem() {
       if (!this.$refs.collectionForm.validate())
         return
+
       let tags = [], values = []
       this.selectedTags.forEach(t => {
         if (t.value) tags.push({id: t.value, name: t.text})
@@ -145,8 +146,7 @@ export default {
         collection: {id: this.currCollection.id},
         values: values
       }
-      console.log('NewItem:')
-      console.log(item)
+
       if (this.id)
         this.$store.dispatch('item/updateItemAction', item)
       else

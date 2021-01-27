@@ -1,18 +1,24 @@
 import itemApi from "api/itemApi"
-import commentApi from "api/commentApi";
+import commentApi from "api/commentApi"
 import {extractNewTags} from "util/util"
 
 export default {
     namespaced: true,
     state: () => ({
-        collectionItems: []
+        collectionItems: [],
+        items: [],
+        currentPage: -1,
+        totalPages: 3,
     }),
-    getters: {},
+    getters: {
+        sortedItems: state =>
+            state.items.sort((a, b) => -(Date.parse(a.creationTime) - Date.parse(b.creationTime)))
+    },
     mutations: {
         addNewItemMutation(state, savedItem) {
             state.collectionItems = [
+                savedItem,
                 ...state.collectionItems,
-                savedItem
             ]
         },
         setCollectionItemsMutation(state, newItems) {
@@ -61,6 +67,22 @@ export default {
                     ...state.collectionItems.slice(indexToUpdate + 1)
                 ]
             }
+        },
+        addItemPageMutation(state, items) {
+            const targetItems = state.items
+                .concat(items)
+                .reduce((res, val) => {
+                    res[val.id] = val
+                    return res
+                }, {})
+
+            state.items = Object.values(targetItems)
+        },
+        updateTotalPagesMutation(state, totalPages) {
+            state.totalPages = totalPages
+        },
+        updateCurrentPageMutation(state, currPage) {
+            state.currentPage = currPage
         }
     },
     actions: {
@@ -93,6 +115,17 @@ export default {
                     commit('addCommentMutation', comment)
                 })
             })
+        },
+        loadPageAction({commit, state}) {
+            if (state.currentPage !== state.totalPages - 1) {
+                itemApi.page(state.currentPage + 1).then(res => {
+                    res.json().then(data => {
+                        commit('addItemPageMutation', data.items)
+                        commit('updateCurrentPageMutation', Math.min(data.currentPage, data.totalPages - 1))
+                        commit('updateTotalPagesMutation', data.totalPages)
+                    })
+                })
+            }
         }
     }
 }

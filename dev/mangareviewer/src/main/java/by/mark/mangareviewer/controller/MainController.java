@@ -2,12 +2,16 @@ package by.mark.mangareviewer.controller;
 
 import by.mark.mangareviewer.domain.Views;
 import by.mark.mangareviewer.domain.user.User;
+import by.mark.mangareviewer.dto.ItemPageDto;
 import by.mark.mangareviewer.service.AuthService;
+import by.mark.mangareviewer.service.ItemService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
@@ -23,7 +27,7 @@ public class MainController {
     private final AuthService authService;
 
     @Autowired
-    public MainController(AuthService authService, ObjectMapper objectMapper) {
+    public MainController(AuthService authService, ObjectMapper objectMapper, ItemService itemService) {
         this.authService = authService;
         objectMapper.setConfig(objectMapper.getSerializationConfig());
         this.profileWriter = objectMapper.writerWithView(Views.IdText.class);

@@ -10,4 +10,6 @@ public final class Views {
     public interface FullCollection extends IdText {}
 
     public interface FullComment extends IdText {}
+
+    public interface FullItem extends IdText {}
 }

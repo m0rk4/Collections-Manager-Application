@@ -11,6 +11,8 @@ export default {
     getAllFields: () => field.get(),
     getAllUserCollections: id =>
         Vue.http.get(`/api/collection/user/${id}`),
+    getAllCollections: () =>
+        collection.get(),
     getCollection: id =>
         collection.get({id}),
     addNewCollection: newCollection =>

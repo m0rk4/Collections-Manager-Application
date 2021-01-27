@@ -3,10 +3,23 @@
     <template v-slot:activator="{ on, attrs }">
       <v-btn
           rounded
-          color="primary"
+          v-if="!collectionId"
           v-bind="attrs"
+          color="white"
+          class="text--primary"
+          fab
+          small
           v-on="on">
-        {{ collectionId ? 'Update' : 'Create' }}
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+      <v-btn
+          v-else
+          rounded
+          text
+          v-bind="attrs"
+          v-on="on"
+          color="primary"
+      >Update
       </v-btn>
     </template>
     <collection-form

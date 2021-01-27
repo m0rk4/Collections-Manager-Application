@@ -44,6 +44,7 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "collection_id", nullable = false)
+    @JsonView(Views.FullItem.class)
     private Collection collection;
 
     @ManyToMany(cascade = {CascadeType.ALL})

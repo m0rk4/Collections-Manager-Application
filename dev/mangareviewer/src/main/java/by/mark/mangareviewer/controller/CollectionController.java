@@ -27,6 +27,12 @@ public class CollectionController {
         this.tagService = tagService;
     }
 
+    @GetMapping
+    @JsonView(Views.FullCollection.class)
+    public List<Collection> getAllCollections() {
+        return collectionService.getAllCollections();
+    }
+
     @GetMapping("theme")
     @JsonView(Views.IdText.class)
     public List<Theme> getAllThemes() {

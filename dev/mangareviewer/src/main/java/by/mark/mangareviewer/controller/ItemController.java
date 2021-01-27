@@ -3,14 +3,19 @@ package by.mark.mangareviewer.controller;
 import by.mark.mangareviewer.domain.Item;
 import by.mark.mangareviewer.domain.Views;
 import by.mark.mangareviewer.domain.user.User;
+import by.mark.mangareviewer.dto.ItemPageDto;
 import by.mark.mangareviewer.service.AuthService;
 import by.mark.mangareviewer.service.ItemService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("api/item")
@@ -23,6 +28,18 @@ public class ItemController {
     public ItemController(AuthService authService, ItemService itemService) {
         this.authService = authService;
         this.itemService = itemService;
+    }
+
+    @GetMapping
+    @JsonView(Views.FullItem.class)
+    public ItemPageDto itemsList(
+            @PageableDefault(
+                    size = 3,
+                    sort = { "creationTime" },
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable
+    ) {
+        return itemService.findAll(pageable);
     }
 
     @PostMapping

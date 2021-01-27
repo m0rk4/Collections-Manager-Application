@@ -53,4 +53,9 @@ public class CollectionServiceImpl implements CollectionService {
         BeanUtils.copyProperties(updatedCollection, collectionFromDb, "id", "user", "fields");
         return collectionRepo.save(collectionFromDb);
     }
+
+    @Override
+    public List<Collection> getAllCollections() {
+        return collectionRepo.findAll();
+    }
 }

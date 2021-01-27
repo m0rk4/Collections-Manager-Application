@@ -13,4 +13,7 @@ public interface CollectionService {
     void deleteCollection(Collection collection);
 
     Collection saveCollection(Collection collectionFromDb, Collection updatedCollection);
+
+    List<Collection> getAllCollections();
+
 }

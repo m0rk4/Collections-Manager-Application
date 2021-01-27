@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.swing.text.View;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -51,7 +52,7 @@ public class Collection {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonView(Views.FullCollection.class)
+    @JsonView({Views.FullCollection.class, Views.FullItem.class})
     private User user;
 
     @ManyToMany(cascade = {CascadeType.ALL})

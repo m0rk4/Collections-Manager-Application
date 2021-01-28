@@ -1,4 +1,6 @@
 import collectionApi from "api/collectionApi"
+import {getIndex, getUpdatedCollection, deleteItemFromCollection} from "util/util"
+
 
 export default {
     namespaced: true,
@@ -12,41 +14,35 @@ export default {
     },
     mutations: {
         addAllUserCollectionsMutation(state, allCollections) {
-            state.userCollections = [
-                ...allCollections
-            ]
+            state.userCollections = allCollections
         },
         addCollectionMutation(state, newCollection) {
             state.userCollections = [
+                newCollection,
                 ...state.userCollections,
-                newCollection
             ]
         },
         deleteCollectionMutation(state, collection) {
-            const indexToDelete = state.userCollections
-                .findIndex(el => el.id === collection.id)
+            const indexToDelete = getIndex(state.userCollections, collection)
+            const globalIndexToDelete = getIndex(state.collections, collection)
 
             if (indexToDelete > -1) {
-                state.userCollections = [
-                    ...state.userCollections.slice(0, indexToDelete),
-                    ...state.userCollections.slice(indexToDelete + 1)
-                ]
+                state.userCollections = deleteItemFromCollection(state.userCollections, indexToDelete)
+            }
+            if (globalIndexToDelete > -1) {
+                state.collections = deleteItemFromCollection(state.collections, globalIndexToDelete)
             }
         },
         updateCollectionMutation(state, updatedCollection) {
-            const indexToReplace = state.userCollections
-                .findIndex(el => el.id === updatedCollection.id)
+            const indexToReplace = getIndex(state.userCollections, updatedCollection)
 
             if (indexToReplace > -1) {
-                state.userCollections = [
-                    ...state.userCollections.slice(0, indexToReplace),
-                    updatedCollection,
-                    ...state.userCollections.slice(indexToReplace + 1)
-                ]
+                state.userCollections =
+                    getUpdatedCollection(state.userCollections, updatedCollection, indexToReplace)
             }
         },
         setAllCollectionsMutation(state, collections) {
-            state.collections = [...collections]
+            state.collections = collections
         }
     },
     actions: {

@@ -1,12 +1,13 @@
 import itemApi from "api/itemApi"
 import commentApi from "api/commentApi"
-import {extractNewTags} from "util/util"
+import {extractNewTags, getIndex, getUpdatedCollection, deleteItemFromCollection} from "util/util"
 
 export default {
     namespaced: true,
     state: () => ({
         collectionItems: [],
         items: [],
+        searchItems: [],
         currentPage: -1,
         totalPages: 3,
     }),
@@ -22,51 +23,47 @@ export default {
             ]
         },
         setCollectionItemsMutation(state, newItems) {
-            state.collectionItems = [
-                ...newItems
-            ]
+            state.collectionItems = newItems
         },
         updateItemMutation(state, updatedItem) {
-            const index = state.collectionItems
-                .findIndex(i => i.id === updatedItem.id)
+            const index = getIndex(state.collectionItems, updatedItem)
 
             if (index > -1) {
-                state.collectionItems = [
-                    ...state.collectionItems.slice(0, index),
-                    updatedItem,
-                    ...state.collectionItems.slice(index + 1)
-                ]
+                state.collectionItems =
+                    getUpdatedCollection(state.collectionItems, updatedItem, index)
             }
         },
         deleteItemMutation(state, deletedItem) {
-            const index = state.collectionItems
-                .findIndex(i => i.id === deletedItem.id)
+            const index = getIndex(state.collectionItems, deletedItem)
+            const globalIndex = getIndex(state.items, deletedItem)
+            const searchIndex = getIndex(state.items, deletedItem)
 
             if (index > -1) {
-                state.collectionItems = [
-                    ...state.collectionItems.slice(0, index),
-                    ...state.collectionItems.slice(index + 1)
-                ]
+                state.collectionItems = deleteItemFromCollection(state.collectionItems, index)
+            }
+            if (globalIndex > -1) {
+                state.items = deleteItemFromCollection(state.items, globalIndex)
+            }
+            if (searchIndex > -1) {
+                state.searchItems = deleteItemFromCollection(state.searchItems, searchIndex)
             }
         },
         addCommentMutation(state, comment) {
-            const indexToUpdate = state.collectionItems
-                .findIndex(i => i.id === comment.item.id)
+            const indexToUpdate = getIndex(state.collectionItems, comment.item)
             const item = state.collectionItems[indexToUpdate]
 
             if (!item.comments.find(it => it.id === comment.id)) {
-                state.collectionItems = [
-                    ...state.collectionItems.slice(0, indexToUpdate),
-                    {
-                        ...item,
-                        comments: [
-                            ...item.comments,
-                            comment
-                        ]
-                    },
-                    ...state.collectionItems.slice(indexToUpdate + 1)
-                ]
+                state.collectionItems = getUpdatedCollection(
+                    state.collectionItems,{
+                    ...item,
+                    comments: [
+                        ...item.comments,
+                        comment
+                    ]
+                }, indexToUpdate)
             }
+
+
         },
         addItemPageMutation(state, items) {
             const targetItems = state.items
@@ -83,6 +80,9 @@ export default {
         },
         updateCurrentPageMutation(state, currPage) {
             state.currentPage = currPage
+        },
+        setSearchItemsMutation(state, items) {
+            state.searchItems = items
         }
     },
     actions: {
@@ -90,8 +90,11 @@ export default {
             itemApi.addNewItem(itemToAdd).then(res => {
                 res.json().then(savedItem => {
                     commit('addNewItemMutation', savedItem)
-                    commit('tag/addTagsMutation',
-                        extractNewTags(savedItem.tags, itemToAdd.tags), {root: true})
+                    commit(
+                        'tag/addTagsMutation',
+                        extractNewTags(savedItem.tags, itemToAdd.tags),
+                        {root: true}
+                    )
                 })
             })
         },
@@ -126,6 +129,13 @@ export default {
                     })
                 })
             }
+        },
+        searchItemsAction({commit}, bundle) {
+            itemApi.findItem(bundle.query, bundle.tag).then(res => {
+                res.json().then(items => {
+                    commit('setSearchItemsMutation', items)
+                })
+            })
         }
     }
 }

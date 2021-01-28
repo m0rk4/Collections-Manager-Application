@@ -1,7 +1,6 @@
 package by.mark.mangareviewer.service.impl;
 
 import by.mark.mangareviewer.domain.Comment;
-import by.mark.mangareviewer.domain.Item;
 import by.mark.mangareviewer.domain.Views;
 import by.mark.mangareviewer.domain.user.User;
 import by.mark.mangareviewer.dto.EventType;

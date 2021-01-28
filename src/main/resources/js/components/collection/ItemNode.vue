@@ -46,6 +46,7 @@
               depressed
               v-for="tag in item.tags"
               :key="String(tag.value)"
+              @click="$router.push({path: 'search', query: {tag: tag.text}})"
           >
             {{ tag.text }}
           </v-btn>
@@ -75,7 +76,7 @@ import VueMarkdown from "vue-markdown/src/VueMarkdown"
 import itemApi from "api/itemApi"
 
 export default {
-  props: ['item', 'filteredKeys', 'sortBy', 'updateItem', 'deleteItem', 'currCollection'],
+  props: ['targetItem', 'filteredKeys', 'sortBy', 'updateItem', 'deleteItem', 'currCollection', 'isDialog'],
   components: {CommentList, VueMarkdown},
   computed: {
     ...mapState({profile: state => state.auth.profile,}),
@@ -83,6 +84,28 @@ export default {
     author() {
       return this.currCollection.user
     },
+    item() {
+      console.log(this.targetItem)
+      if (!this.isDialog) {
+        return this.targetItem
+      } else {
+        var obj = {}
+        obj['id'] = this.targetItem.id
+        obj['title'] = this.targetItem.title
+        obj['comments'] = this.targetItem.comments
+        obj['likers'] = this.targetItem.likers
+        obj['tags'] = this.targetItem.tags.map(t => {
+          return {text: t.name, value: t.id}
+        })
+        this.filteredKeys.forEach(k => {
+          if (k !== 'Title') {
+            const id = this.targetItem.values.findIndex(val => val.field.text === k)
+            obj[k.toLowerCase()] = this.targetItem.values[id] ? this.targetItem.values[id].value : ''
+          }
+        })
+        return obj
+      }
+    }
   },
   methods: {
     processLike(id) {

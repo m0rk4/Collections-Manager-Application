@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,6 +23,7 @@ import java.util.Set;
 @Data
 @ToString(of = {"id", "title"})
 @EqualsAndHashCode(of = {"id", "title"})
+@Indexed
 @JsonIdentityInfo(
         property = "id",
         generator = ObjectIdGenerators.PropertyGenerator.class
@@ -30,6 +34,7 @@ public class Item {
     @JsonView(Views.Id.class)
     private Long id;
     @JsonView(Views.IdText.class)
+    @Field
     private String title;
 
     @Column(updatable = false)
@@ -45,31 +50,45 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "collection_id", nullable = false)
     @JsonView(Views.FullItem.class)
+    @IndexedEmbedded
     private Collection collection;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH,
+    })
     @JoinTable(
             name = "item_tag",
             joinColumns = {@JoinColumn(name = "item_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
     @JsonView(Views.IdText.class)
+    @IndexedEmbedded
     private Set<Tag> tags = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    })
     @JoinTable(
             name = "item_liker",
             joinColumns = {@JoinColumn(name = "item_id")},
             inverseJoinColumns = {@JoinColumn(name = "liker_id")}
     )
-    @JsonView(Views.IdText.class)
+    @JsonView({Views.FullItem.class, Views.FullCollection.class})
     private Set<User> likers = new HashSet<>();
 
-    @OneToMany(mappedBy = "item")
-    @JsonView(Views.IdText.class)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "item", orphanRemoval = true)
+    @JsonView({Views.FullItem.class, Views.FullCollection.class})
+    @IndexedEmbedded
     private Set<Value> values = new HashSet<>();
 
-    @OneToMany(mappedBy = "item", orphanRemoval = true)
-    @JsonView(Views.IdText.class)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "item", orphanRemoval = true)
+    @JsonView({Views.FullItem.class, Views.FullCollection.class})
+    @IndexedEmbedded
     private List<Comment> comments = new LinkedList<>();
 }

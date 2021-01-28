@@ -31,6 +31,7 @@ public class CollectionServiceImpl implements CollectionService {
         Set<Field> newFields = collection.getFields();
         List<Field> savedFields = fieldService.saveFields(newFields);
         collection.setFields(new HashSet<>(savedFields));
+
         return collectionRepo.save(collection);
     }
 
@@ -50,7 +51,8 @@ public class CollectionServiceImpl implements CollectionService {
         List<Field> savedFields = fieldService.saveFields(newFields);
         collectionFromDb.setFields(new HashSet<>(savedFields));
 
-        BeanUtils.copyProperties(updatedCollection, collectionFromDb, "id", "user", "fields");
+        BeanUtils.copyProperties(updatedCollection, collectionFromDb,
+                "id", "user", "fields", "creationDate", "items");
         return collectionRepo.save(collectionFromDb);
     }
 

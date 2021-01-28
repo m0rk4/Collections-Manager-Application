@@ -9,7 +9,12 @@
         View...
       </v-btn>
     </template>
-    <item-node :item="item" :currCollection="collection"></item-node>
+    <item-node :targetItem="item"
+               :currCollection="collection"
+               :filteredKeys="collection.fields.map(f => f.text)"
+               :isDialog="true"
+               :deleteItem="deleteItem"
+    ></item-node>
   </v-dialog>
 </template>
 
@@ -22,6 +27,11 @@ export default {
   data() {
     return {
       active: false
+    }
+  },
+  methods: {
+    deleteItem(item) {
+      this.$store.dispatch('item/deleteItemAction', item)
     }
   }
 }

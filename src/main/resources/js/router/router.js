@@ -7,6 +7,7 @@ import LoginPage from "pages/auth/LoginPage.vue"
 import NotFoundPage from "pages/NotFoundPage.vue"
 import AdminPage from "pages/admin/AdminPage.vue"
 import CollectionPage from "pages/collection/CollectionPage.vue"
+import SearchPage from "pages/SearchPage.vue"
 
 Vue.use(VueRouter)
 
@@ -17,6 +18,7 @@ const routes = [
     {path: '/user/:id?', component: UserPage},
     {path: '/admin', component: AdminPage},
     {path: '/collection/:id', component: CollectionPage},
+    {path: '/search', component: SearchPage},
     {path: '/*', component: NotFoundPage}
 ]
 

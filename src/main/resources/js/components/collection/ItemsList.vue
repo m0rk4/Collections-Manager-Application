@@ -73,12 +73,13 @@
               lg="4"
           >
             <item-node
-                :item="item"
+                :targetItem="item"
                 :sortBy="sortBy"
                 :filteredKeys="filteredKeys"
                 :deleteItem="deleteItem"
                 :updateItem="updateItem"
                 :currCollection="currCollection"
+                :isDialog="false"
             ></item-node>
           </v-col>
         </v-row>

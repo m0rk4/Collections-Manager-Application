@@ -207,6 +207,7 @@ export default {
       else
         this.$store.dispatch('collection/addCollectionAction', collection)
       this.$refs.addForm.reset()
+      this.$refs.fieldForm.reset()
       this.onClose()
     }
   }

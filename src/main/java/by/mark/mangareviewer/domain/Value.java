@@ -1,6 +1,8 @@
 package by.mark.mangareviewer.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -19,6 +21,7 @@ public class Value {
     private Long id;
 
     @JsonView(Views.IdText.class)
+    @org.hibernate.search.annotations.Field
     private String value;
 
     @ManyToOne
@@ -30,5 +33,4 @@ public class Value {
     @JoinColumn(name = "field_id", nullable = false)
     @JsonView(Views.IdText.class)
     private Field field;
-
 }

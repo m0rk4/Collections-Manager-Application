@@ -52,7 +52,7 @@ public class CollectionController {
     }
 
     @GetMapping("user/{id}")
-    @JsonView(Views.IdText.class)
+    @JsonView(Views.FullCollection.class)
     public List<Collection> getAllUserCollections(@PathVariable("id") User user) {
         return collectionService.getAllUserCollections(user);
     }
@@ -83,7 +83,6 @@ public class CollectionController {
     @DeleteMapping("{id}")
     @PreAuthorize("hasAuthority('USER')")
     public void deleteCollection(@PathVariable("id") Collection collectionToDelete) {
-        collectionToDelete.getFields().clear();
         collectionService.deleteCollection(collectionToDelete);
     }
 }

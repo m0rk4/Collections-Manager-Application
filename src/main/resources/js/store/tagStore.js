@@ -6,17 +6,14 @@ export default {
         allTags: []
     }),
     getters: {
-        allTagsAsChips(state) {
-            var chips = []
-            state.allTags.forEach(t => chips.push({text: t.name, value: t.id}))
-            return chips
-        }
+        allTagsAsChips: state =>
+            state.allTags.map(t => {
+                return {text: t.name, value: t.id}
+            })
     },
     mutations: {
         getAllTagsMutation(state, tagsFromDb) {
-            state.allTags = [
-                ...tagsFromDb
-            ]
+            state.allTags = tagsFromDb
         },
         addTagsMutation(state, newTags) {
             state.allTags = [

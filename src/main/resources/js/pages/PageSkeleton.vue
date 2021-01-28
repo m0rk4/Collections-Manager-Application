@@ -1,12 +1,30 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-app-bar-title>Reviewer</v-app-bar-title>
+    <v-app-bar app dense flat>
+
+      <v-app-bar-nav-icon href="/">
+        <v-icon>mdi-home</v-icon>
+      </v-app-bar-nav-icon>
+
+      <v-toolbar-title>Reviewer</v-toolbar-title>
+
       <v-spacer></v-spacer>
 
-      <v-btn ref="main" href="/" icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      <v-text-field
+          style="max-width: 450px;"
+          dense
+          hide-details
+          light
+          class="mx-2"
+          placeholder="Search..."
+          single-line
+          solo
+          flat
+          v-model="query"
+          @click:prepend-inner="searchPage"
+          @keyup.enter="searchPage"
+          prepend-inner-icon="mdi-magnify"
+      ></v-text-field>
 
       <v-divider vertical inset></v-divider>
 
@@ -69,6 +87,11 @@ import {addHandler} from "util/ws";
 
 export default {
   components: {LoginDialog, RegisterDialog},
+  data() {
+    return {
+      query: ''
+    }
+  },
   computed: {
     ...mapState({
       messageAlert: state => state.alert.message,
@@ -81,7 +104,13 @@ export default {
     ])
   },
   methods: {
-    ...mapMutations('item', ['addCommentMutation', 'updateItemMutation'])
+    ...mapMutations('item', ['addCommentMutation', 'updateItemMutation']),
+    searchPage() {
+      if (this.$route.path === 'search') {
+        this.$router.push('/')
+      }
+      this.$router.push({path: 'search', query: {query: this.query}})
+    }
   },
   created() {
     addHandler(data => {
@@ -109,7 +138,7 @@ export default {
           }
         }
     )
-  }
+  },
 }
 </script>
 

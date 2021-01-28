@@ -16,7 +16,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .requiresChannel()
+                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+                .requiresSecure()
+                .and()
+                .csrf().disable()
                 .antMatcher("/**")
                 .authorizeRequests(a -> a
                         .antMatchers("/admin").hasAuthority("ADMIN")

@@ -3,6 +3,8 @@ import Vue from 'vue'
 const item = Vue.resource('/api/item{/id}')
 
 export default {
+    findItem: (query, tag) =>
+        Vue.http.get('/api/item/search', {params: {query, tag}}),
     page: page =>
         Vue.http.get('/api/item', {params: {page}}),
     addNewItem: itemToAdd =>

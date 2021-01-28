@@ -4,6 +4,7 @@ import by.mark.mangareviewer.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 
@@ -18,6 +19,7 @@ public class Comment {
     private Long id;
 
     @JsonView(Views.IdText.class)
+    @Field
     private String text;
 
     @ManyToOne

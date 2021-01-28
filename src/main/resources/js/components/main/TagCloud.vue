@@ -7,11 +7,13 @@
     <v-card-text>
       <v-container fluid>
         <v-btn
+            depressed
             class="my-2 mx-1"
             rounded
             small
             v-for="tag in allTagsAsChips"
             :key="String(tag.value)"
+            @click="$router.push({path: 'search', query: {tag: tag.text}})"
         >
           {{ tag.text }}
         </v-btn>

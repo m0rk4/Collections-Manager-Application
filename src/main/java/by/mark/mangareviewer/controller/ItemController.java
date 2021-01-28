@@ -16,6 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("api/item")
@@ -30,12 +32,23 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    @GetMapping("search")
+    @JsonView(Views.FullItem.class)
+    public List<Item> itemsBySearch(
+            @RequestParam(value = "query", required = false)
+                    String query,
+            @RequestParam(value = "tag", required = false)
+                    String tag
+    ) {
+        return itemService.findByQueryAndTag(query, tag);
+    }
+
     @GetMapping
     @JsonView(Views.FullItem.class)
     public ItemPageDto itemsList(
             @PageableDefault(
                     size = 3,
-                    sort = { "creationTime" },
+                    sort = {"creationTime"},
                     direction = Sort.Direction.DESC
             ) Pageable pageable
     ) {
@@ -43,14 +56,14 @@ public class ItemController {
     }
 
     @PostMapping
-    @JsonView(Views.IdText.class)
+    @JsonView(Views.FullItem.class)
     @PreAuthorize("hasAuthority('USER')")
     public Item addNewItem(@RequestBody Item item) {
         return itemService.addNewItem(item);
     }
 
     @PutMapping("{id}")
-    @JsonView(Views.IdText.class)
+    @JsonView(Views.FullItem.class)
     @PreAuthorize("hasAuthority('USER')")
     public Item updateItem(
             @PathVariable("id") Item itemFromDb,

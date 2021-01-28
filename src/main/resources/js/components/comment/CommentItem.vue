@@ -1,7 +1,7 @@
 <template>
   <v-list-item>
     <v-list-item-avatar>
-      <img :src="comment ? comment.author.userpic : ''">
+      <img :src="comment.author.userpic">
     </v-list-item-avatar>
     <v-list-item-content>
       <v-list-item-title>{{ comment.text }}</v-list-item-title>

@@ -5,7 +5,10 @@
     <v-card-title>
       <span class="title font-weight-medium">{{ item.title }}</span>
       <v-spacer></v-spacer>
-      <item-dialog :item="item" :collection="item.collection"></item-dialog>
+      <item-dialog
+          :item="item"
+          :collection="item.collection"
+      ></item-dialog>
     </v-card-title>
 
     <v-card-text class="headline font-weight-bold">
@@ -13,9 +16,11 @@
         <v-btn
             class="my-2 mx-1"
             rounded
+            depressed
             small
             v-for="tag in item.tags"
-            :key="String(tag.value)"
+            :key="String(tag.name)"
+            @click="$router.push({path: 'search', query: {tag: tag.name}})"
         >
           {{ tag.name }}
         </v-btn>
@@ -45,8 +50,8 @@
                   @click="$router.push({path: `/collection/${item.collection.id}`})"
             >Collection:
             </span>
-            <span class="mr-1" @click="$router.push({path: `/collection/${item.collection.id}`})"
-            >{{ item.collection.title }}
+          <span class="mr-1" @click="$router.push({path: `/collection/${item.collection.id}`})"
+          >{{ item.collection.title }}
             </span>
         </v-list-item-content>
       </v-list-item>
@@ -60,7 +65,7 @@ import ItemDialog from "components/main/ItemDialog.vue"
 export default {
   name: 'MainItem',
   components: {ItemDialog},
-  props: ['item']
+  props: ['item'],
 }
 </script>
 

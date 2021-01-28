@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ public class Theme {
     @JsonView(Views.Id.class)
     private Long id;
     @JsonView(Views.IdText.class)
+    @Field
     private String text;
 
     @OneToMany(mappedBy = "theme")

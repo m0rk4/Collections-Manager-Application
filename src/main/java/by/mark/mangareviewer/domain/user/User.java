@@ -4,6 +4,7 @@ import by.mark.mangareviewer.domain.Views;
 import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.search.annotations.Field;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,6 +24,7 @@ public class User implements UserDetails, Serializable {
     @JsonView(Views.Id.class)
     private String id;
     @JsonView(Views.IdText.class)
+    @Field
     private String name;
     @JsonView(Views.IdText.class)
     private String email;

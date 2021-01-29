@@ -194,7 +194,6 @@ export default {
     itemsToDisplay() {
       const displayItems = []
       this.collectionItems.forEach(i => {
-        console.log(i)
         var obj = {}
         obj['id'] = i.id
         obj['title'] = i.title

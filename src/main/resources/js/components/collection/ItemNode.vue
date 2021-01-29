@@ -85,7 +85,6 @@ export default {
       return this.currCollection.user
     },
     item() {
-      console.log(this.targetItem)
       if (!this.isDialog) {
         return this.targetItem
       } else {

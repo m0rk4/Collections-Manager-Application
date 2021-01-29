@@ -35,7 +35,7 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     public ItemServiceImpl(ItemRepo itemRepo, WsSender wsSender, TagService tagService, SearchService searchService) {
         this.itemRepo = itemRepo;
-        this.wsSender = wsSender.getSender(ObjectType.LIKE, Views.IdText.class);
+        this.wsSender = wsSender.getSender(ObjectType.LIKE, Views.FullItem.class);
         this.tagService = tagService;
         this.searchService = searchService;
     }

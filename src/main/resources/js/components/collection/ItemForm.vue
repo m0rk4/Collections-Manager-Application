@@ -91,8 +91,8 @@ export default {
       values: [],
       id: null,
       options: {
-        duration: 700,
-        offset: 75,
+        duration: 1000,
+        offset: 35,
         easing: 'easeInOutCubic',
       },
     }
@@ -109,18 +109,18 @@ export default {
     }
   },
   watch: {
+    currentCollection: function (newVal) {
+      this.currCollection = newVal
+      this.values = newVal.fields.map(f => {
+        return {id: f.id, value: ''}
+      })
+    },
     itemAttr: function (newVal) {
       this.id = newVal.id
       this.selectedTags = newVal.tags
       this.title = newVal.title
       this.values = newVal.values
       this.$vuetify.goTo(this.$refs.collectionForm, this.options)
-    },
-    currentCollection: function (newVal) {
-      this.currCollection = newVal
-      this.values = newVal.fields.map(f => {
-        return {id: f.id, value: ''}
-      })
     },
   },
   methods: {

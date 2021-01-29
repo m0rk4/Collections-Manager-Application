@@ -15,16 +15,35 @@ export function getIndex(targetCollection, item) {
 }
 
 export function getUpdatedCollection(targetCollection, item, index) {
-    return [
-        ...targetCollection.slice(0, index),
+    return index > -1 ? [...targetCollection.slice(0, index),
         item,
-        ...targetCollection.slice(index + 1)
-    ]
+        ...targetCollection.slice(index + 1)] : targetCollection
 }
 
 export function deleteItemFromCollection(targetCollection, index) {
-    return [
-        ...targetCollection.slice(0, index),
-        ...targetCollection.slice(index + 1)
-    ]
+    return index > -1 ? [...targetCollection.slice(0, index),
+        ...targetCollection.slice(index + 1)] : targetCollection
+}
+
+export function addComment(targetCollection, comment) {
+    const indexToUpdate = getIndex(targetCollection, comment.item)
+    if (indexToUpdate < 0) {
+        return targetCollection
+    }
+    const item = targetCollection[indexToUpdate]
+
+    if (!item.comments.find(it => it.id === comment.id)) {
+        return getUpdatedCollection(
+            targetCollection,
+            {
+                ...item,
+                comments: [
+                    ...item.comments,
+                    comment
+                ]
+            },
+            indexToUpdate)
+    } else {
+        return targetCollection
+    }
 }

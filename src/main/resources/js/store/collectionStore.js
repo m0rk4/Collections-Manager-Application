@@ -26,20 +26,13 @@ export default {
             const indexToDelete = getIndex(state.userCollections, collection)
             const globalIndexToDelete = getIndex(state.collections, collection)
 
-            if (indexToDelete > -1) {
-                state.userCollections = deleteItemFromCollection(state.userCollections, indexToDelete)
-            }
-            if (globalIndexToDelete > -1) {
-                state.collections = deleteItemFromCollection(state.collections, globalIndexToDelete)
-            }
+            state.userCollections = deleteItemFromCollection(state.userCollections, indexToDelete)
+            state.collections = deleteItemFromCollection(state.collections, globalIndexToDelete)
         },
         updateCollectionMutation(state, updatedCollection) {
             const indexToReplace = getIndex(state.userCollections, updatedCollection)
 
-            if (indexToReplace > -1) {
-                state.userCollections =
-                    getUpdatedCollection(state.userCollections, updatedCollection, indexToReplace)
-            }
+            state.userCollections = getUpdatedCollection(state.userCollections, updatedCollection, indexToReplace)
         },
         setAllCollectionsMutation(state, collections) {
             state.collections = collections

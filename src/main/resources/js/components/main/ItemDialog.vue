@@ -6,7 +6,7 @@
           color="primary"
           v-bind="attrs"
           v-on="on">
-        View...
+        OPEN
       </v-btn>
     </template>
     <item-node :targetItem="item"
@@ -14,6 +14,7 @@
                :filteredKeys="collection.fields.map(f => f.text)"
                :isDialog="true"
                :deleteItem="deleteItem"
+               :updateItem="updateItem"
     ></item-node>
   </v-dialog>
 </template>
@@ -32,6 +33,10 @@ export default {
   methods: {
     deleteItem(item) {
       this.$store.dispatch('item/deleteItemAction', item)
+    },
+    updateItem(item) {
+      this.$store.commit('item/setModifyItemMutation', item)
+      this.$router.push({path: `/collection/${this.collection.id}`})
     }
   }
 }

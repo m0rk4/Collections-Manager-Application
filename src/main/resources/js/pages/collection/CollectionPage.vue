@@ -82,6 +82,7 @@ import collectionApi from "api/collectionApi";
 import ItemForm from "components/collection/ItemForm.vue";
 import ItemsList from "components/collection/ItemsList.vue";
 import VueMarkdown from "vue-markdown/src/VueMarkdown"
+import {mapState} from "vuex";
 
 export default {
   components: {ItemForm, ItemsList, VueMarkdown},
@@ -91,13 +92,25 @@ export default {
       item: null,
     }
   },
+  computed: {
+    ...mapState({
+      itemToModify: state => state.item.itemToModify
+    })
+  },
   created() {
     this.$store.dispatch('tag/getAllTagsAction')
     collectionApi.getCollection(this.$route.params.id).then(res => {
       res.json().then(collection => {
         this.currCollection = collection
+        if (this.itemToModify) {
+          this.setUpdateForm(this.itemToModify)
+          this.$store.commit('item/setModifyItemMutation', null)
+        }
       })
     })
+  },
+  mounted() {
+
   },
   methods: {
     setUpdateForm(item) {

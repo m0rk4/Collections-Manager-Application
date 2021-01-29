@@ -8,17 +8,20 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MyCustomAuthenticationProvider implements AuthenticationProvider {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public MyCustomAuthenticationProvider(UserService userService) {
+    public MyCustomAuthenticationProvider(UserService userService, PasswordEncoder passwordEncoder) {
         super();
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -27,8 +30,8 @@ public class MyCustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails userDetails = userService.loadUserByUsername(authName);
         String password = userDetails.getPassword();
 
-        Object authenticationCredentials = authentication.getCredentials();
-        if (authenticationCredentials.equals(password)) {
+        String authenticationCredentials = (String) authentication.getCredentials();
+        if (passwordEncoder.matches(authenticationCredentials, password)) {
             if (userDetails.isAccountNonLocked()) {
                 return getUsernamePasswordAuthenticationToken(authentication, userDetails);
             } else {

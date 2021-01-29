@@ -48,6 +48,8 @@ dependencies {
     compile group: 'org.hibernate', name: 'hibernate-search-engine', version: '5.11.8.Final'
     compile group: 'org.hibernate', name: 'hibernate-search-orm', version: '5.11.8.Final'
 
+    compile 'org.flywaydb:flyway-core'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

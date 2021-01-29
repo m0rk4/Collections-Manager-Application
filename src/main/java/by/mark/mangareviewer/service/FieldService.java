@@ -7,5 +7,4 @@ import java.util.List;
 public interface FieldService {
     List<Field> getAllFields();
     List<Field> saveFields(Iterable<Field> toSave);
-    void deleteFields(Iterable<Field> toDelete);
 }

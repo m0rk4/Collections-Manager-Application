@@ -51,22 +51,20 @@
       </div>
     </v-app-bar>
 
-
     <v-main class="my-4">
       <v-container>
+        <v-alert class="ml-auto mr-4"
+                 dismissible
+                 dense
+                 :type="typeAlert"
+                 :value="visibilityAlert"
+                 transition="scale-transition"
+        >
+          {{ messageAlert }}
+        </v-alert>
         <router-view></router-view>
       </v-container>
     </v-main>
-
-    <v-alert class="ml-auto mr-4"
-             dismissible
-             dense
-             :type="typeAlert"
-             :value="visibilityAlert"
-             transition="scale-transition"
-    >
-      {{ messageAlert }}
-    </v-alert>
 
     <v-footer padless>
       <v-col
@@ -109,7 +107,7 @@ export default {
       if (this.$route.path === 'search') {
         this.$router.push('/')
       }
-      this.$router.push({path: 'search', query: {query: this.query}})
+      this.$router.push({path: '/search', query: {query: this.query}})
     }
   },
   created() {

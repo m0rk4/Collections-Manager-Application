@@ -13,7 +13,7 @@
             small
             v-for="tag in allTagsAsChips"
             :key="String(tag.value)"
-            @click="$router.push({path: 'search', query: {tag: tag.text}})"
+            @click="$router.push({path: '/search', query: {tag: tag.text}})"
         >
           {{ tag.text }}
         </v-btn>

@@ -46,7 +46,7 @@
               depressed
               v-for="tag in item.tags"
               :key="String(tag.value)"
-              @click="$router.push({path: 'search', query: {tag: tag.text}})"
+              @click="$router.push({path: '/search', query: {tag: tag.text}})"
           >
             {{ tag.text }}
           </v-btn>

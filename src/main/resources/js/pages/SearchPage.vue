@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     showItem(item) {
-      console.log(item)
+      this.$router.push({path: `/collection/${item.collection.id}`})
     }
   }
 }

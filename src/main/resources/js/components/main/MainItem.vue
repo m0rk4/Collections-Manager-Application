@@ -20,7 +20,7 @@
             small
             v-for="tag in item.tags"
             :key="String(tag.name)"
-            @click="$router.push({path: 'search', query: {tag: tag.name}})"
+            @click="$router.push({path: '/search', query: {tag: tag.name}})"
         >
           {{ tag.name }}
         </v-btn>

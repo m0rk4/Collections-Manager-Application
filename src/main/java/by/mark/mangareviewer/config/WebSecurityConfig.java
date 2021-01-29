@@ -35,9 +35,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout(l -> l.logoutSuccessUrl("/").permitAll());
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
-
 }

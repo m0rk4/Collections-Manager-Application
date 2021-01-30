@@ -8,10 +8,10 @@
 
     <v-row class="justify-center mt-4">
       <v-btn href="/oauth2/authorization/facebook" icon>
-        <v-icon>mdi-facebook</v-icon>
+        <v-icon light color="blue">mdi-facebook</v-icon>
       </v-btn>
       <v-btn href="/oauth2/authorization/github" icon>
-        <v-icon>mdi-git</v-icon>
+        <v-icon light color="red">mdi-git</v-icon>
       </v-btn>
     </v-row>
 

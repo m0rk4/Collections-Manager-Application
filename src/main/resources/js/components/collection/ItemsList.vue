@@ -11,11 +11,10 @@
     >
       <template v-slot:header>
         <v-toolbar
-            dark
-            color="blue darken-3"
-            class="mb-1"
+            class="mb-2 accent lighten-1"
         >
           <v-text-field
+              rounded
               class="mr-1"
               v-model="search"
               clearable
@@ -28,6 +27,7 @@
           <template v-if="$vuetify.breakpoint.smAndUp">
             <v-spacer></v-spacer>
             <v-select
+                rounded
                 class="mr-1"
                 v-model="sortBy"
                 flat
@@ -41,11 +41,11 @@
             <v-btn-toggle
                 v-model="sortDesc"
                 mandatory
+                rounded
             >
               <v-btn
                   large
                   depressed
-                  color="blue"
                   :value="false"
               >
                 <v-icon>mdi-arrow-up</v-icon>
@@ -53,7 +53,6 @@
               <v-btn
                   large
                   depressed
-                  color="blue"
                   :value="true"
               >
                 <v-icon>mdi-arrow-down</v-icon>
@@ -97,8 +96,7 @@
               <v-btn
                   dark
                   text
-                  color="primary"
-                  class="ml-2"
+                  class="ml-2 accent lighten-1"
                   v-bind="attrs"
                   v-on="on"
               >
@@ -128,8 +126,7 @@
           <v-btn
               fab
               dark
-              color="blue darken-3"
-              class="mr-1"
+              class="mr-1 accent lighten-1"
               @click="formerPage"
           >
             <v-icon>mdi-chevron-left</v-icon>
@@ -137,8 +134,7 @@
           <v-btn
               fab
               dark
-              color="blue darken-3"
-              class="ml-1"
+              class="ml-1 accent lighten-1"
               @click="nextPage"
           >
             <v-icon>mdi-chevron-right</v-icon>

@@ -1,22 +1,21 @@
 <template>
   <v-app>
-    <v-app-bar app dense flat>
+    <v-app-bar app flat color="primary">
 
       <v-app-bar-nav-icon href="/">
         <v-icon>mdi-home</v-icon>
       </v-app-bar-nav-icon>
 
-      <v-toolbar-title>Reviewer</v-toolbar-title>
+      <v-toolbar-title v-if="$vuetify.breakpoint.mdAndUp">Viewer</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <v-text-field
-          style="max-width: 450px;"
           dense
           hide-details
           light
           class="mx-2"
-          placeholder="Search..."
+          :placeholder="$vuetify.breakpoint.mdAndUp ? 'Search...' : ''"
           single-line
           solo
           flat
@@ -28,27 +27,41 @@
 
       <v-divider vertical inset></v-divider>
 
-      <div v-if="!profile">
+      <template v-if="!profile">
         <login-dialog></login-dialog>
         <register-dialog></register-dialog>
-      </div>
-      <div v-else>
-        <v-btn text
-               rounded
-               class="mx-2"
-               @click="$router.push('/user')"
-               :disabled="$router.currentRoute.path === '/user'"
-        >
-          <v-avatar size="36" class="mr-1">
-            <img :src="profile.userpic">
-          </v-avatar>
-          {{ profile.name }}
-        </v-btn>
-        <v-btn depressed rounded v-if="isAdmin" @click="$router.push('/admin')">Admin</v-btn>
-        <v-btn href="/logout" icon>
-          <v-icon>mdi-export</v-icon>
-        </v-btn>
-      </div>
+      </template>
+
+      <template v-else>
+        <v-btn-toggle
+            class="ml-2"
+            rounded>
+          <v-btn
+              large
+              text
+              @click="$router.push('/user')"
+              :disabled="$router.currentRoute.path === '/user'"
+          >
+            <v-avatar size="36" :class="$vuetify.breakpoint.smAndUp ? 'mr-1' : ''">
+              <img :src="profile.userpic">
+            </v-avatar>
+            <template v-if="$vuetify.breakpoint.smAndUp">
+              {{ profile.name }}
+            </template>
+          </v-btn>
+          <v-btn
+              large
+              text
+              v-if="isAdmin"
+              @click="$router.push('/admin')"
+          >Admin
+          </v-btn>
+          <v-btn large href="/logout" icon>
+            <v-icon>mdi-export</v-icon>
+          </v-btn>
+        </v-btn-toggle>
+      </template>
+
     </v-app-bar>
 
     <v-main class="my-4">
@@ -66,13 +79,43 @@
       </v-container>
     </v-main>
 
-    <v-footer padless>
-      <v-col
-          class="text-center"
-          cols="12"
-      >
-        {{ new Date().getFullYear() }} — <strong>Reviewer</strong>
-      </v-col>
+    <v-footer
+        color="primary"
+        padless
+    >
+      <v-row class="justify-center">
+        <v-col class="align-center">
+          <v-card
+              color="primary"
+              flat
+              tile
+              class="text-center"
+          >
+            <v-card-text>
+              <v-btn text rounded @click="$vuetify.theme.dark = !$vuetify.theme.dark">
+                <v-icon
+                    large
+                >
+                  mdi-theme-light-dark
+                </v-icon>
+              </v-btn>
+            </v-card-text>
+
+            <v-card-text class="pt-0 text-center">
+              Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum.
+              Praesent
+              ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit
+              amet
+            </v-card-text>
+
+            <v-divider></v-divider>
+
+            <v-card-text>
+              {{ new Date().getFullYear() }} — <strong>Viewer</strong>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-footer>
   </v-app>
 </template>
@@ -87,7 +130,7 @@ export default {
   components: {LoginDialog, RegisterDialog},
   data() {
     return {
-      query: ''
+      query: '',
     }
   },
   computed: {
@@ -110,7 +153,14 @@ export default {
       this.$router.push({path: '/search', query: {query: this.query}})
     }
   },
+  watch: {
+    '$vuetify.theme.dark': function (newVal) {
+      localStorage.setItem('isDarkTheme', newVal)
+    }
+  },
   created() {
+    this.$vuetify.theme.dark = localStorage.getItem('isDarkTheme') ?
+        localStorage.getItem('isDarkTheme') !== 'false' : false
     addHandler(data => {
           if (data.objectType === 'COMMENT') {
             switch (data.eventType) {

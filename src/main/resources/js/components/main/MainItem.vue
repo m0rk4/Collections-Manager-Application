@@ -1,9 +1,9 @@
 <template>
   <v-card
-      class="mx-auto mb-2"
+      class="mx-auto mb-4"
   >
-    <v-card-title>
-      <span class="title font-weight-medium">{{ item.title }}</span>
+    <v-card-title class="accent lighten-2">
+      {{ item.title }}
       <v-spacer></v-spacer>
       <item-dialog
           :item="item"
@@ -14,7 +14,7 @@
     <v-card-text class="headline font-weight-bold">
       <v-container fluid class="mt-2">
         <v-btn
-            class="my-2 mx-1"
+            class="mt-2 mx-1 info"
             rounded
             depressed
             small
@@ -28,9 +28,11 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-list-item class="grow">
+      <v-list-item>
         <v-list-item-avatar>
           <v-img
+              style="cursor: pointer"
+              @click="$router.push({path: `/user/${item.collection.user.id}`})"
               class="elevation-6"
               alt=""
               :src="item.collection.user.userpic"
@@ -39,21 +41,24 @@
 
         <v-list-item-content>
           <v-list-item-title
+              style="cursor: pointer"
+              class="text-h6 font-weight-regular"
               @click="$router.push({path: `/user/${item.collection.user.id}`})"
           >
             {{ item.collection.user.name }}
           </v-list-item-title>
         </v-list-item-content>
 
-        <v-list-item-content>
-            <span class="subheading mr-2"
+          <v-list-item-content class="rounded-xl accent lighten-3" style="cursor: pointer">
+            <span class="mx-2 text-h6 font-weight-regular"
                   @click="$router.push({path: `/collection/${item.collection.id}`})"
             >Collection:
             </span>
-          <span class="mr-1" @click="$router.push({path: `/collection/${item.collection.id}`})"
-          >{{ item.collection.title }}
+            <span class="mx-2 subtitle-1 font-weight-regular"
+                  @click="$router.push({path: `/collection/${item.collection.id}`})"
+            >{{ item.collection.title }}
             </span>
-        </v-list-item-content>
+          </v-list-item-content>
       </v-list-item>
     </v-card-actions>
   </v-card>

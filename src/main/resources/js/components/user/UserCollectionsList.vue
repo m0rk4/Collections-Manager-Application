@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mb-8">
-    <v-toolbar flat>
+  <v-card class="mb-8" >
+    <v-toolbar flat class="accent lighten-1">
       <v-toolbar-title>User collections</v-toolbar-title>
       <v-spacer></v-spacer>
       <collection-dialog
@@ -8,7 +8,6 @@
           :userId="userId"
       ></collection-dialog>
     </v-toolbar>
-    <v-divider></v-divider>
     <v-card-text>
       <v-container fluid>
         <div class="scroller">
@@ -26,24 +25,29 @@
                       :src="c.pic || 'https://res.cloudinary.com/dr7gxyl6z/image/upload/v1610476635/cwdemo/pic_noimage01_n0hc0r.jpg'"
                   ></v-img>
                 </v-avatar>
-                <v-divider></v-divider>
+
                 <v-card-title
                     @click="$router.push({path: `/collection/${c.id}`})"
-                    class="collectionTitle">
+                    class="collectionTitle accent lighten-2">
                     {{ c.title }}
                 </v-card-title>
-                <v-divider></v-divider>
-                <v-card-text>
-                  <v-container fluid>
-                    <div>Theme: {{ c.theme.text }}</div>
-                    <div>Author: {{ }}</div>
-                  </v-container>
+
+                <v-card-text class="mt-2">
+                  <v-list>
+                    <v-list-item-title>
+                      Theme:
+                    </v-list-item-title>
+                    <v-list-item-title class="font-weight-light">
+                      {{ c.theme.text }}
+                    </v-list-item-title>
+                  </v-list>
                 </v-card-text>
+                <v-divider></v-divider>
                 <v-card-actions v-if="currUser && (userId === currUser.id || isAdmin)">
                       <collection-dialog :collectionId="c.id"></collection-dialog>
                       <v-btn
                           text
-                          color="primary"
+                          rounded
                           @click="$store.dispatch('collection/deleteCollectionAction', c)"
                       >Delete</v-btn>
                 </v-card-actions>

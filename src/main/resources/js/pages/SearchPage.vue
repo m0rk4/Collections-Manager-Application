@@ -1,17 +1,23 @@
 <template>
   <v-row>
-    <v-col>
-      <span class="headline font-weight-bold">
-        Results for: {{ query || tag }} - ({{ items.length }}) Items
+    <v-col sm="12" md="6" xl="6" lg="6" cols="12">
+      <span class="text-h1 text-left font-weight-light">
+        Results for "{{ query || tag }}":
       </span>
+      <div class="text-h1 text-left font-weight-light">
+        {{ items.length }} Items
+      </div>
     </v-col>
     <v-col>
       <v-card
           class="mx-auto"
           tile
       >
-        <v-list dense>
-          <v-subheader>RESULTS</v-subheader>
+        <v-list dense class="accent lighten-1">
+          <v-subheader
+              class="text-h4 font-weight-regular">
+            Search Results:
+          </v-subheader>
           <v-list-item-group>
             <v-list-item
                 @click="showItem(item)"
@@ -19,15 +25,23 @@
                 :key="i"
             >
               <v-list-item-content>
-                <v-list-item-title v-text="item.title"></v-list-item-title>
+                <v-list-item-title
+                    class="text-h6 font-weight-light"
+                >
+                  <span class="font-weight-medium">Title:</span> {{ item.title }}
+                </v-list-item-title>
               </v-list-item-content>
-              <v-list-item-content>
-                <v-list-item-subtitle v-text="item.collection.title"></v-list-item-subtitle>
+              <v-list-item-content v-if="$vuetify.breakpoint.mdAndUp">
+                <v-list-item-subtitle
+                    class="text-h6 font-weight-light"
+                >
+                  <span class="font-weight-medium">Collection:</span> {{ item.collection.title }}
+                </v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-avatar>
-                  <v-img
-                      :src="item.collection.pic"
-                  ></v-img>
+                <v-img
+                    :src="item.collection.pic"
+                ></v-img>
               </v-list-item-avatar>
             </v-list-item>
           </v-list-item-group>

@@ -59,8 +59,15 @@
       </v-container>
     </v-card-text>
     <v-card-actions v-if="profile && ((author && (author.id === profile.id)) || isAdmin)">
-      <v-btn @click="addItem" rounded outlined>Submit</v-btn>
-      <v-btn @click="cancelItem" v-if="id" rounded outlined>Cancel</v-btn>
+      <v-btn @click="addItem"
+             class="success lighten-1"
+             rounded
+             x-large>Submit</v-btn>
+      <v-btn @click="cancelItem"
+             class="error lighten-1"
+             v-if="id"
+             x-large
+             rounded>Cancel</v-btn>
     </v-card-actions>
   </v-card>
 </template>

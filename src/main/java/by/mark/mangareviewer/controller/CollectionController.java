@@ -64,7 +64,7 @@ public class CollectionController {
     }
 
     @PostMapping
-    @JsonView(Views.IdText.class)
+    @JsonView(Views.FullCollection.class)
     @PreAuthorize("hasAuthority('USER')")
     public Collection addNewCollection(@RequestBody Collection collection) {
         return collectionService.addNewCollection(collection);

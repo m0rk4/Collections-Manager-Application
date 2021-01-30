@@ -1,14 +1,13 @@
 <template>
   <v-card>
-    <v-toolbar flat>
-      <v-toolbar-title>Tags</v-toolbar-title>
-    </v-toolbar>
-    <v-divider></v-divider>
+    <v-card-title class="accent lighten-1">
+      Tags
+    </v-card-title>
     <v-card-text>
       <v-container fluid>
         <v-btn
             depressed
-            class="my-2 mx-1"
+            class="mt-2 mx-1 info"
             rounded
             small
             v-for="tag in allTagsAsChips"

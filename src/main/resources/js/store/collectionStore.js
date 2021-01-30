@@ -21,6 +21,10 @@ export default {
                 newCollection,
                 ...state.userCollections,
             ]
+            state.collections = [
+                ...state.collections,
+                newCollection
+            ]
         },
         deleteCollectionMutation(state, collection) {
             const indexToDelete = getIndex(state.userCollections, collection)

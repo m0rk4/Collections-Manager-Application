@@ -2,11 +2,13 @@
   <v-dialog v-model="active">
     <template v-slot:activator="{ on, attrs }">
       <v-btn
+          icon
           rounded
-          color="primary"
+          depressed
+          fib
           v-bind="attrs"
           v-on="on">
-        OPEN
+        <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </template>
     <item-node :targetItem="item"

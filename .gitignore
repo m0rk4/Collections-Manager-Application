@@ -26,6 +26,9 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 /src/main/resources/db/migration/**
+gradle
+indexpath
+by.mark.mangareviewer.domain.Item
 
 ### NetBeans ###
 /nbproject/private/

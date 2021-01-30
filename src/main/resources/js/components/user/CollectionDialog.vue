@@ -2,11 +2,10 @@
   <v-dialog v-model="active">
     <template v-slot:activator="{ on, attrs }">
       <v-btn
+          depressed
           rounded
           v-if="!collectionId"
           v-bind="attrs"
-          color="white"
-          class="text--primary"
           fab
           small
           v-on="on">
@@ -18,7 +17,6 @@
           text
           v-bind="attrs"
           v-on="on"
-          color="primary"
       >Update
       </v-btn>
     </template>

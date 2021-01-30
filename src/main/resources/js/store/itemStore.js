@@ -102,7 +102,7 @@ export default {
         addCommentAction({commit}, comment) {
             commentApi.addNewComment(comment).then(res => {
                 res.json().then(savedComment => {
-                    commit('addCommentMutation', comment)
+                  //  commit('addCommentMutation', comment)
                 })
             })
         },

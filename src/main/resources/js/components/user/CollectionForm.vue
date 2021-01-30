@@ -1,11 +1,11 @@
 <template>
   <v-card>
-    <v-toolbar flat>
+    <v-toolbar flat class="accent lighten-1">
       <v-toolbar-title>
         {{ toUpdate ? 'Update Collection' : 'New Collection' }}
       </v-toolbar-title>
     </v-toolbar>
-    <v-divider></v-divider>
+
     <v-card-text>
       <v-container>
         <v-form
@@ -39,23 +39,22 @@
               label="Theme"
               outlined
               persistent-hint
-              :rules="[v => !!v || 'Choose one theme']"
+              :rules="themeRules"
           ></v-combobox>
 
-          <v-btn @click="picWidget.open()" color="primary">Upload Picture</v-btn>
-          <div>Status: <i>{{ fileStatus }}</i></div>
-
+          <v-btn @click="picWidget.open()" rounded>Upload Picture</v-btn>
+          <div>
+            <span class="subtitle-1 font-weight-medium">Status: <i class="font-weight-light">{{ fileStatus }}</i></span>
+          </div>
         </v-form>
       </v-container>
     </v-card-text>
 
-    <v-divider></v-divider>
-    <v-toolbar flat>
+    <v-toolbar flat class="accent lighten-1">
       <v-toolbar-title>
         Fields
       </v-toolbar-title>
     </v-toolbar>
-    <v-divider></v-divider>
 
     <v-card-text>
       <v-container>
@@ -66,27 +65,36 @@
             hide-selected
             label="Select Fields"
             multiple
+            deletable-chips
             persistent-hint
             small-chips
             :rules="[v => v.length > 0 || 'Choose or Add at least one field']"
         >
         </v-combobox>
         <v-card class="pa-4">
-          <div class="primary text-center"><span class="white--text">Create your field</span></div>
-          <v-form lazy-validation v-model="valid" ref="fieldForm">
+          <v-card-title class="accent lighten-2 text-h6 font-weight-regular">
+            Create your field
+          </v-card-title>
+          <v-form
+              lazy-validation
+              v-model="valid"
+              ref="fieldForm">
             <v-text-field
                 label="Field Name"
                 v-model="newField"
                 :rules="fieldRules"
             ></v-text-field>
+            <v-checkbox
+                v-model="isMarkDownSupported"
+                label="MarkDown"></v-checkbox>
           </v-form>
-          <v-checkbox v-model="isMarkDownSupported" label="MarkDown"></v-checkbox>
-          <v-btn @click="addField">add</v-btn>
+          <v-btn @click="addField">Add Field</v-btn>
         </v-card>
       </v-container>
 
       <v-btn
           x-large
+          rounded
           color="success"
           @click="submitCollection"
       >
@@ -115,6 +123,10 @@ export default {
       fieldRules: [
         v => !!v || 'Field name is required',
         v => (v && v.length <= 15) || 'Field name must be less than 15 characters',
+      ],
+      themeRules: [
+        v => !!v || 'Choose one theme',
+        v => this.allThemes.findIndex(t => t.id === v.id) !== -1 || 'Choose theme from the list'
       ],
       valid: true,
       isMarkDownSupported: false,
@@ -167,6 +179,7 @@ export default {
     collectionApi.getAllThemes().then(res => {
       res.json().then(data => {
         data.forEach(item => {
+          console.log(item)
           this.allThemes.push(item)
         })
       })

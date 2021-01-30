@@ -1,16 +1,15 @@
 <template>
   <v-card
       class="mx-auto text-center">
-    <v-toolbar flat>
+    <v-toolbar flat class="accent lighten-1">
       <v-toolbar-title>User activity</v-toolbar-title>
     </v-toolbar>
-    <v-divider></v-divider>
     <v-card-text>
-      <v-sheet color="blue">
+      <v-sheet color="info">
         <v-sparkline
             :value="values"
             :labels="labels"
-            color="rgba(255, 255, 255, .7)"
+            color="white"
             height="100"
             padding="24"
             stroke-linecap="round"
@@ -18,10 +17,8 @@
         </v-sparkline>
       </v-sheet>
     </v-card-text>
-    <v-card-text>
-      <div class="display-1 font-weight-medium">
-        Last 5 Days (Items)
-      </div>
+    <v-card-text class="display-1 font-weight-regular">
+        5 Days Contribution
     </v-card-text>
   </v-card>
 </template>

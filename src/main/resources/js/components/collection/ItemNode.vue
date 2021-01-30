@@ -1,7 +1,7 @@
 <template>
   <v-card>
-    <v-card-title class="font-weight-bold">
-      <v-btn text rounded>{{ item.title }}</v-btn>
+    <v-card-title class="accent lighten-2">
+      {{ item.title }}
       <v-spacer></v-spacer>
       <v-btn icon v-if="youLiked(item.likers)" @click="processLike(item.id)">
         <v-icon>mdi-thumb-up</v-icon>
@@ -11,7 +11,7 @@
       </v-btn>
       {{ item.likers.length }}
     </v-card-title>
-    <v-divider></v-divider>
+
     <v-card-text>
       <v-container fluid>
         <v-list dense>
@@ -19,19 +19,21 @@
               v-for="(key, index) in filteredKeys"
               :key="String(index)"
           >
-            <v-list-item-content :class="{ 'blue--text': sortBy === key }">
+            <v-list-item-content
+                :class="{ 'blue--text': sortBy === key } + ' text-h6 font-weight-regular'"
+            >
               {{ key }}:
             </v-list-item-content>
             <v-list-item-content
                 v-if="!isKeySupportsMarkDown(key)"
-                class="align-end"
+                class="align-end subtitle-1 font-weight-light"
                 :class="{ 'blue--text': sortBy === key }"
             >
               {{ item[key.toLowerCase()] }}
             </v-list-item-content>
             <v-list-item-content
                 v-else
-                class="align-end"
+                class="align-end subtitle-1 font-weight-light"
                 :class="{ 'blue--text': sortBy === key }"
             >
               <vue-markdown :source="item[key.toLowerCase()]"></vue-markdown>
@@ -40,7 +42,7 @@
         </v-list>
         <v-container fluid>
           <v-btn
-              class="my-2 mx-1"
+              class="mt-2 mx-1 info"
               rounded
               small
               depressed

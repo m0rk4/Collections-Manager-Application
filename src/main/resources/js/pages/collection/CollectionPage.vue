@@ -18,9 +18,9 @@
                       class="text-center"
                       cols="12"
                   >
-                    <h1 class="display-4 font-weight-bold black--text mb-4">
+                    <span class="display-4 font-weight-bold font-italic primary--text mb-4">
                       {{ currCollection.title }}
-                    </h1>
+                    </span>
                   </v-col>
                 </v-row>
               </v-parallax>
@@ -33,22 +33,24 @@
     <v-row>
       <v-col class="col-12 col-md-6 col-lg-6 col-xl-6">
         <v-card>
-          <v-toolbar flat>
+          <v-toolbar flat class="accent lighten-1 my-2">
             <v-list-item two-line>
               <v-list-item-content>
-                <v-list-item-title class="headline">
+                <v-list-item-title class="text-h4 mt-4">
                   {{ currCollection.theme.text }}
                 </v-list-item-title>
-                <v-list-item-subtitle>
-                  User: <i>{{ currCollection.user.name }}</i>
+                <v-list-item-subtitle class="text-h6 font-weight-light mb-4">
+                  Author: <i>{{ currCollection.user.name }}</i>
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-toolbar>
-          <v-divider></v-divider>
           <v-card-text>
             <v-container fluid>
               <v-list dense>
+                <v-list-item-title class="mb-4 text-h5 font-weight-medium">
+                  Description:
+                </v-list-item-title>
                 <v-list-item>
                   <vue-markdown :source="currCollection.description"></vue-markdown>
                 </v-list-item>

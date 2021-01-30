@@ -3,8 +3,13 @@
       v-model="register"
       max-width="450px">
     <template class="mx-2" v-slot:activator="{ on, attrs }">
-      <v-btn v-bind="attrs" v-on="on">
+      <v-btn v-if="$vuetify.breakpoint.mdAndUp" v-bind="attrs" rounded v-on="on">
         Register
+      </v-btn>
+      <v-btn v-else small fab v-bind="attrs" v-on="on">
+        <v-icon>
+          mdi-account-plus-outline
+        </v-icon>
       </v-btn>
     </template>
     <register-form

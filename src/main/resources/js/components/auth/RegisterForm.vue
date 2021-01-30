@@ -1,6 +1,6 @@
 <template>
   <v-card max-width="600px">
-    <v-toolbar flat>
+    <v-toolbar flat color="primary">
       <v-toolbar-title>Registration</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="isDialog" icon @click="onClick">
@@ -15,6 +15,7 @@
                 lazy-validation>
 
           <v-text-field
+              @keyup.enter="login"
               v-model="email"
               label="E-mail"
               :rules="emailRules"
@@ -22,6 +23,7 @@
           ></v-text-field>
 
           <v-text-field
+              @keyup.enter="login"
               v-model="login"
               label="Login"
               :rules="loginRules"
@@ -29,6 +31,7 @@
           ></v-text-field>
 
           <v-text-field
+              @keyup.enter="login"
               v-model="pass"
               label="Password"
               :rules="[passRules.len]"
@@ -39,6 +42,7 @@
           ></v-text-field>
 
           <v-text-field
+              @keyup.enter="login"
               v-model="passRep"
               label="Repeat Password"
               :rules="[passRules.len, passRules.match]"
@@ -48,7 +52,12 @@
               required
           ></v-text-field>
 
-          <v-btn @click="register" block class="mt-1 mb-4">
+          <v-btn
+              color="success"
+                 rounded
+              @click="register"
+              block
+              class="mt-1 mb-4">
             Register
           </v-btn>
 
@@ -57,7 +66,7 @@
         </v-form>
 
         <v-row class="justify-center mt-4">
-          <v-btn @click="showLoginPage">Login</v-btn>
+          <v-btn color="warning" rounded @click="showLoginPage">Login</v-btn>
         </v-row>
 
       </v-container>

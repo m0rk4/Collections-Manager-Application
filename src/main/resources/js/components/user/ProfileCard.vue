@@ -8,18 +8,19 @@
     >
       <v-img :src="user.userpic"></v-img>
     </v-avatar>
-    <v-divider></v-divider>
-    <v-card-title>
+    <v-card-title class="accent lighten-1">
       {{ user.name }}
     </v-card-title>
     <v-divider></v-divider>
     <v-card-text>
-      <v-container fluid>
-        <v-card class="pa-4">
-          <div>Registration Date</div>
-          <div><i>{{ user.lastVisit }}</i></div>
-        </v-card>
-      </v-container>
+      <v-list>
+        <v-list-item-title class="text-h6 font-weight-regular">
+          Registration Date:
+        </v-list-item-title>
+        <v-list-item-subtitle class="subtitle-1 font-weight-light font-italic">
+         {{ user.lastVisit ? user.lastVisit : 'Unknown' }}
+        </v-list-item-subtitle>
+      </v-list>
     </v-card-text>
   </v-card>
 </template>

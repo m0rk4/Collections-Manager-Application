@@ -1,6 +1,6 @@
 <template>
   <v-card max-width="600px">
-    <v-toolbar flat>
+    <v-toolbar flat color="primary">
       <v-toolbar-title>Login</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="isDialog" icon @click="onClick">
@@ -10,15 +10,17 @@
     <v-divider></v-divider>
     <v-card-text>
       <v-container>
-        <v-form ref="loginForm">
+        <v-form ref="loginForm" >
 
           <v-text-field
+              @keyup.enter="login"
               v-model="username"
               label="Login or E-mail"
               required
           ></v-text-field>
 
           <v-text-field
+              @keyup.enter="login"
               v-model="password"
               label="Password"
               :append-icon="showPL ? 'mdi-eye' : 'mdi-eye-off'"
@@ -27,7 +29,11 @@
               required
           ></v-text-field>
 
-          <v-btn @click="login" block class="mt-1 mb-4">
+          <v-btn
+                 color="success"
+                 rounded
+                 @click="login"
+                 block class="mt-1 mb-4">
             Enter
           </v-btn>
 
@@ -36,7 +42,7 @@
         </v-form>
 
         <v-row class="justify-center mt-4">
-          <v-btn @click="showRegisterPage">Register</v-btn>
+          <v-btn color="warning" @click="showRegisterPage" rounded>Register</v-btn>
         </v-row>
 
       </v-container>

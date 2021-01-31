@@ -25,6 +25,10 @@ export default {
                 savedItem,
                 ...state.collectionItems,
             ]
+            state.items = [
+                savedItem,
+                ...state.items
+            ]
         },
         setCollectionItemsMutation(state, newItems) {
             state.collectionItems = newItems

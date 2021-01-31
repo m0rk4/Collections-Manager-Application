@@ -9,7 +9,7 @@ export const i18n = new VueI18n({
     messages: {
         en: {
             appTitle: 'Reviewer',
-            appDescription: '',
+            appDescription: 'Made by m0rk4',
             searchPlaceholder: 'Search',
             login: 'Login',
             register: 'Register',
@@ -81,7 +81,7 @@ export const i18n = new VueI18n({
         },
         ru: {
             appTitle: 'Ревьювер',
-            appDescription: '',
+            appDescription: 'Сделал m0rk4',
             searchPlaceholder: 'Найти',
             login: 'Войти',
             register: 'Зарегистрироваться',

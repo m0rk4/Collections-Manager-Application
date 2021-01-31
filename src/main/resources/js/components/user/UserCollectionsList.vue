@@ -95,7 +95,7 @@ export default {
 }
 
 .scroller-item-props {
-  width: 200px;
+  width: 250px;
   position: relative !important;
 }
 </style>

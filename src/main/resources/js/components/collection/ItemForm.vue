@@ -152,7 +152,7 @@ export default {
         id: this.id,
         title: this.title,
         tags: tags,
-        collection: {id: this.currCollection.id, user: this.currCollection.user},
+        collection: this.currCollection,
         values: values
       }
 

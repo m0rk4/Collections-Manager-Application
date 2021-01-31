@@ -52,7 +52,7 @@
           <v-list-item-content class="rounded-xl accent lighten-3" style="cursor: pointer">
             <span class="mx-2 text-h6 font-weight-regular"
                   @click="$router.push({path: `/collection/${item.collection.id}`})"
-            >Collection:
+            >{{ $t('collection') }}:
             </span>
             <span class="mx-2 subtitle-1 font-weight-regular"
                   @click="$router.push({path: `/collection/${item.collection.id}`})"

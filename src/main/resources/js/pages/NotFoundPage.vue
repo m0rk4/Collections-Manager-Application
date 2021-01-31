@@ -1,11 +1,13 @@
 <template>
   <div>
     <v-row class="justify-center ma-8">
-      Sorry, page not found
+      {{ $t('sorryPageNF') }}
     </v-row>
     <v-row class="justify-center ma-8">
-      <v-btn href="/">
-        Main page
+      <v-btn
+          @click="$router.push('/')"
+          rounded>
+        {{ $t('mainPage') }}
       </v-btn>
     </v-row>
   </div>

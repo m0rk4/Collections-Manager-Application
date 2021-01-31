@@ -1,7 +1,7 @@
 <template>
   <v-card class="mb-8">
     <v-card-title class="accent lighten-1">
-      Popular Collections
+      {{ $t('popCollections') }}
       <v-spacer></v-spacer>
       <collection-dialog
           v-if="currUser"
@@ -10,7 +10,7 @@
     </v-card-title>
 
     <v-card-text class="subtitle-1 font-weight-light pt-4">
-      Collections with maximum items included
+      {{ $t('popCollectionsDesc') }}
     </v-card-text>
 
     <v-divider></v-divider>
@@ -46,7 +46,7 @@
                     @click="$router.push({path: `/collection/${item.id}`})"
                 >
                   <template v-if="$vuetify.breakpoint.smAndUp">
-                    View Collection
+                    {{$t('viewCollection')}}
                   </template>
                   <v-icon :class="$vuetify.breakpoint.smAndUp ? 'ml-1' : ''">
                     mdi-open-in-new

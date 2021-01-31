@@ -2,7 +2,7 @@
   <v-card>
     <v-toolbar flat class="accent lighten-1">
       <v-toolbar-title>
-        {{ toUpdate ? 'Update Collection' : 'New Collection' }}
+        {{ toUpdate ? $t('update') : $t('add') }}
       </v-toolbar-title>
     </v-toolbar>
 
@@ -16,7 +16,7 @@
           <v-text-field
               v-model="title"
               outlined
-              label="Title"
+              :label="$t('title')"
               clearable
               :rules="titleRules"
               required
@@ -27,7 +27,7 @@
               v-model="description"
               auto-grow
               outlined
-              label="Description (MarkDown supported)"
+              :label="$t('descMD')"
               rows="1"
               :rules="descRules"
               required
@@ -36,15 +36,17 @@
           <v-combobox
               v-model="theme"
               :items="allThemes"
-              label="Theme"
+              :label="$t('theme')"
               outlined
               persistent-hint
               :rules="themeRules"
           ></v-combobox>
 
-          <v-btn @click="picWidget.open()" rounded>Upload Picture</v-btn>
+          <v-btn @click="picWidget.open()" rounded>{{ $t('upPic') }}</v-btn>
           <div>
-            <span class="subtitle-1 font-weight-medium">Status: <i class="font-weight-light">{{ fileStatus }}</i></span>
+            <span class="subtitle-1 font-weight-medium">{{ $t('status') }}:
+              <i class="font-weight-light">
+                {{ fileStatus }}</i></span>
           </div>
         </v-form>
       </v-container>
@@ -52,7 +54,7 @@
 
     <v-toolbar flat class="accent lighten-1">
       <v-toolbar-title>
-        Fields
+        {{ $t('fields') }}
       </v-toolbar-title>
     </v-toolbar>
 
@@ -63,24 +65,24 @@
             :items="allFields"
             :search-input.sync="search"
             hide-selected
-            label="Select Fields"
+            :label="$t('selFields')"
             multiple
             deletable-chips
             persistent-hint
             small-chips
-            :rules="[v => v.length > 0 || 'Choose or Add at least one field']"
+            :rules="[v => v.length > 0 || $t('chOrAdd1F')]"
         >
         </v-combobox>
         <v-card class="pa-4">
           <v-card-title class="accent lighten-2 text-h6 font-weight-regular">
-            Create your field
+            {{$t('creatUrField')}}
           </v-card-title>
           <v-form
               lazy-validation
               v-model="valid"
               ref="fieldForm">
             <v-text-field
-                label="Field Name"
+                :label="$t('fieldName')"
                 v-model="newField"
                 :rules="fieldRules"
             ></v-text-field>
@@ -88,7 +90,7 @@
                 v-model="isMarkDownSupported"
                 label="MarkDown"></v-checkbox>
           </v-form>
-          <v-btn @click="addField">Add Field</v-btn>
+          <v-btn rounded @click="addField">{{$t('addField')}}</v-btn>
         </v-card>
       </v-container>
 
@@ -98,7 +100,7 @@
           color="success"
           @click="submitCollection"
       >
-        {{ toUpdate ? 'Update' : 'Submit' }}
+        {{ toUpdate ? $t('update') : $t('submit') }}
       </v-btn>
     </v-card-text>
 
@@ -113,20 +115,20 @@ export default {
   data() {
     return {
       titleRules: [
-        v => !!v || 'Title is required',
-        v => (v && v.length <= 50) || 'Title must be less than 50 characters',
+        v => !!v || this.$t('titIsReq'),
+        v => (v && v.length <= 50) || this.$t('titleLess50'),
       ],
       descRules: [
-        v => !!v || 'Description is required',
-        v => (v && v.length <= 1000) || 'Up to 1000 characters',
+        v => !!v || this.$t('description') + ' ' + this.$t('isRequired'),
+        v => (v && v.length <= 1000) || this.$t('upTo1000'),
       ],
       fieldRules: [
-        v => !!v || 'Field name is required',
-        v => (v && v.length <= 15) || 'Field name must be less than 15 characters',
+        v => !!v || this.$t('fNIsReq'),
+        v => (v && v.length <= 15) || this.$t('f15'),
       ],
       themeRules: [
-        v => !!v || 'Choose one theme',
-        v => this.allThemes.findIndex(t => t.id === v.id) !== -1 || 'Choose theme from the list'
+        v => !!v || this.$t('ch1Th'),
+        v => this.allThemes.findIndex(t => t.id === v.id) !== -1 || this.$t('chTFrList')
       ],
       valid: true,
       isMarkDownSupported: false,
@@ -138,7 +140,7 @@ export default {
       theme: null,
       picWidget: '',
       fileUrl: null,
-      fileStatus: 'No file',
+      fileStatus: this.$t('fileStatusInit'),
       allThemes: [],
       selectedFields: [],
       existingCollection: null,

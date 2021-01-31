@@ -15,10 +15,10 @@
     <v-card-text>
       <v-list>
         <v-list-item-title class="text-h6 font-weight-regular">
-          Registration Date:
+          {{ $t('regDate') }}:
         </v-list-item-title>
         <v-list-item-subtitle class="subtitle-1 font-weight-light font-italic">
-         {{ user.lastVisit ? user.lastVisit : 'Unknown' }}
+         {{ user.lastVisit ? user.lastVisit : $t('unknown') }}
         </v-list-item-subtitle>
       </v-list>
     </v-card-text>

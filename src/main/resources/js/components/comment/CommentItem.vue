@@ -6,6 +6,8 @@
     </v-list-item-content>
     <v-list-item-avatar>
       <img
+          @click="$router.push({path: `/user/${comment.author.id}`})"
+          style="cursor: pointer"
           :src="comment.author.userpic"
       >
     </v-list-item-avatar>

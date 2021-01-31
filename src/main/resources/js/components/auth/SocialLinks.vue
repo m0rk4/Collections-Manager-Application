@@ -3,7 +3,7 @@
     <v-divider></v-divider>
 
     <v-row class="justify-center mt-2">
-      Enter via social media:
+      {{$t('socialMedia')}}
     </v-row>
 
     <v-row class="justify-center mt-4">

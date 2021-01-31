@@ -10,7 +10,7 @@
         >
           <v-text-field
               v-model="title"
-              label="Title"
+              :label="$t('title')"
               clearable
               :rules="titleRules"
               required
@@ -21,13 +21,13 @@
               multiple
               deletable-chips
               chips
-              label="Tags"
-              :rules="[v => v.length > 0 || 'Tag is required']"
+              :label="$t('tags')"
+              :rules="[v => v.length > 0 || $t('tagIsReq')]"
           ></v-combobox>
           <v-list>
             <v-list-item>
               <v-list-item-title class="headline">
-                Properties
+                {{ $t('props') }}
               </v-list-item-title>
             </v-list-item>
             <v-list-item
@@ -62,12 +62,14 @@
       <v-btn @click="addItem"
              class="success lighten-1"
              rounded
-             x-large>Submit</v-btn>
+             x-large>{{ $t('submit') }}
+      </v-btn>
       <v-btn @click="cancelItem"
              class="error lighten-1"
              v-if="id"
              x-large
-             rounded>Cancel</v-btn>
+             rounded>{{ $t('cancel') }}
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -80,16 +82,16 @@ export default {
   data() {
     return {
       titleRules: [
-        v => !!v || 'Title is required',
-        v => (v && v.length <= 50) || 'Title must be less than 50 characters',
+        v => !!v || this.$t('titIsReq'),
+        v => (v && v.length <= 50) || this.$t('titleLess50'),
       ],
       textMDRules: [
-        v => !!v || 'Required',
-        v => (v && v.length <= 255) || 'Length must be less than 255 characters'
+        v => !!v || this.$t('required'),
+        v => (v && v.length <= 255) || this.$t('lenLess') + ' 255 ' + this.$t('characters')
       ],
       textRules: [
-        v => !!v || 'Required',
-        v => (v && v.length <= 50) || 'Length must be less than 50 characters'
+        v => !!v || this.$t('required'),
+        v => (v && v.length <= 50) || this.$t('lenLess') + ' 50 ' + this.$t('characters')
       ],
       valid: true,
       title: '',

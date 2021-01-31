@@ -1,7 +1,7 @@
 <template>
   <v-card max-width="600px">
     <v-toolbar flat color="primary">
-      <v-toolbar-title>Registration</v-toolbar-title>
+      <v-toolbar-title>{{$t('register')}}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="isDialog" icon @click="onClick">
         <v-icon>mdi-close</v-icon>
@@ -25,7 +25,7 @@
           <v-text-field
               @keyup.enter="login"
               v-model="login"
-              label="Login"
+              :label="$t('username')"
               :rules="loginRules"
               required
           ></v-text-field>
@@ -33,7 +33,7 @@
           <v-text-field
               @keyup.enter="login"
               v-model="pass"
-              label="Password"
+              :label="$tc('password', 1)"
               :rules="[passRules.len]"
               :append-icon="showP1 ? 'mdi-eye' : 'mdi-eye-off'"
               :type="showP1 ? 'text' : 'password'"
@@ -44,7 +44,7 @@
           <v-text-field
               @keyup.enter="login"
               v-model="passRep"
-              label="Repeat Password"
+              :label="$t('repeat') + ' ' + $tc('password', 0)"
               :rules="[passRules.len, passRules.match]"
               :append-icon="showP2 ? 'mdi-eye' : 'mdi-eye-off'"
               :type="showP2 ? 'text' : 'password'"
@@ -54,11 +54,11 @@
 
           <v-btn
               color="success"
-                 rounded
+              rounded
               @click="register"
               block
               class="mt-1 mb-4">
-            Register
+            {{$t('register')}}
           </v-btn>
 
           <social-links></social-links>
@@ -66,7 +66,12 @@
         </v-form>
 
         <v-row class="justify-center mt-4">
-          <v-btn color="warning" rounded @click="showLoginPage">Login</v-btn>
+          <v-btn
+              color="warning"
+              rounded
+              @click="showLoginPage"
+          >{{ $t('login') }}
+          </v-btn>
         </v-row>
 
       </v-container>
@@ -92,17 +97,17 @@ export default {
       passRep: '',
       emailRules: [
         e => !!e
-            || 'Email is required'
+            || 'Email ' + this.$t('isRequired')
       ],
       loginRules: [
         v => (v && v.length <= 15 && v.length >= 3)
-            || 'Login must be less than 15 characters and bigger than 3 characters',
+            || this.$t('loginRules'),
       ],
       passRules: {
         len: v => (v && v.length <= 15 && v.length >= 5)
-            || 'Password must be less than 15 characters and bigger than 5 characters',
+            || this.$t('passRules'),
         match: () => this.pass === this.passRep
-            || 'Different Passwords'
+            || this.$t('diffPass')
       }
     }
   },

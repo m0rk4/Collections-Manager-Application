@@ -2,7 +2,7 @@
   <v-card
       class="mx-auto text-center">
     <v-toolbar flat class="accent lighten-1">
-      <v-toolbar-title>User activity</v-toolbar-title>
+      <v-toolbar-title>{{$t('userActivity')}}</v-toolbar-title>
     </v-toolbar>
     <v-card-text>
       <v-sheet color="info">
@@ -18,7 +18,7 @@
       </v-sheet>
     </v-card-text>
     <v-card-text class="display-1 font-weight-regular">
-        5 Days Contribution
+        {{$t('last5Days')}}
     </v-card-text>
   </v-card>
 </template>

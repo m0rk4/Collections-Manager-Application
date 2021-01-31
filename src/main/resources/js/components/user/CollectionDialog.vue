@@ -17,7 +17,7 @@
           text
           v-bind="attrs"
           v-on="on"
-      >Update
+      >{{$t('update')}}
       </v-btn>
     </template>
     <collection-form

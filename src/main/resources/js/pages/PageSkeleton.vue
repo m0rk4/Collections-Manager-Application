@@ -2,11 +2,11 @@
   <v-app>
     <v-app-bar app flat color="primary">
 
-      <v-app-bar-nav-icon href="/">
+      <v-app-bar-nav-icon @click="moveToMain">
         <v-icon>mdi-home</v-icon>
       </v-app-bar-nav-icon>
 
-      <v-toolbar-title v-if="$vuetify.breakpoint.mdAndUp">Viewer</v-toolbar-title>
+      <v-toolbar-title v-if="$vuetify.breakpoint.mdAndUp">{{ $t('appTitle') }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -15,7 +15,7 @@
           hide-details
           light
           class="mx-2"
-          :placeholder="$vuetify.breakpoint.mdAndUp ? 'Search...' : ''"
+          :placeholder="$vuetify.breakpoint.mdAndUp ? $t('searchPlaceholder') + '...' : ''"
           single-line
           solo
           flat
@@ -54,7 +54,7 @@
               text
               v-if="isAdmin"
               @click="$router.push('/admin')"
-          >Admin
+          >{{ $t('admin') }}
           </v-btn>
           <v-btn large href="/logout" icon>
             <v-icon>mdi-export</v-icon>
@@ -99,19 +99,28 @@
                   mdi-theme-light-dark
                 </v-icon>
               </v-btn>
+              <v-btn
+                  fab
+                  text
+                  @click="changeLocale('ru')"
+              >RU
+              </v-btn>
+              <v-btn
+                  fab
+                  text
+                  @click="changeLocale('en')"
+              >EN
+              </v-btn>
             </v-card-text>
 
             <v-card-text class="pt-0 text-center">
-              Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum.
-              Praesent
-              ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit
-              amet
+              {{$t('appDescription')}}
             </v-card-text>
 
             <v-divider></v-divider>
 
             <v-card-text>
-              {{ new Date().getFullYear() }} — <strong>Viewer</strong>
+              {{ new Date().getFullYear() }} — <strong>{{ $t('appTitle') }}</strong>
             </v-card-text>
           </v-card>
         </v-col>
@@ -151,16 +160,29 @@ export default {
         this.$router.push('/')
       }
       this.$router.push({path: '/search', query: {query: this.query}})
+    },
+    changeLocale(locale) {
+      this.$i18n.locale = locale
+    },
+    moveToMain() {
+      if (this.$route.path !== '/') {
+        this.$router.push('/')
+      }
     }
   },
   watch: {
     '$vuetify.theme.dark': function (newVal) {
       localStorage.setItem('isDarkTheme', newVal)
+    },
+    '$i18n.locale': function (newVal) {
+      localStorage.setItem('appLocale', newVal)
     }
   },
   created() {
     this.$vuetify.theme.dark = localStorage.getItem('isDarkTheme') ?
         localStorage.getItem('isDarkTheme') !== 'false' : false
+    this.$i18n.locale = localStorage.getItem('appLocale') ?
+        localStorage.getItem('appLocale') : 'en'
     addHandler(data => {
           if (data.objectType === 'COMMENT') {
             switch (data.eventType) {

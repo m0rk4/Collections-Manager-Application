@@ -112,8 +112,8 @@ export default {
     processLike(id) {
       if (this.profile) {
         itemApi.likeItem(id).then(res => {
-          if (res.ok) {
-            console.log('Like processed')
+          if (!res.ok) {
+            console.error(`Can't process like for item with id: ${id}`)
           }
         })
       }

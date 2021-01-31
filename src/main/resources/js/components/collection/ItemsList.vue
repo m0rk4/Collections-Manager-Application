@@ -22,7 +22,7 @@
               solo-inverted
               hide-details
               prepend-inner-icon="mdi-magnify"
-              label="Search"
+              :label="$t('searchPlaceholder')"
           ></v-text-field>
           <template v-if="$vuetify.breakpoint.smAndUp">
             <v-spacer></v-spacer>
@@ -35,7 +35,7 @@
                 hide-details
                 :items="keys"
                 prepend-inner-icon="mdi-magnify"
-                label="Sort by"
+                :label="$t('sortBy')"
             ></v-select>
             <v-spacer></v-spacer>
             <v-btn-toggle
@@ -90,7 +90,7 @@
             align="center"
             justify="center"
         >
-          <span class="grey--text">Items per page</span>
+          <span class="grey--text">{{ $t('itemsPP') }}</span>
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -121,7 +121,7 @@
               class="mr-4
             grey--text"
           >
-            Page {{ page }} of {{ numberOfPages }}
+             {{ $t('page') + ' ' + page + ' ' + $t('of') + ' ' + numberOfPages }}
           </span>
           <v-btn
               fab
@@ -182,7 +182,8 @@ export default {
     }),
     ...mapGetters('auth', ['isAdmin']),
     numberOfPages() {
-      return Math.ceil(this.collectionItems.length / this.itemsPerPage)
+      let pages = Math.ceil(this.collectionItems.length / this.itemsPerPage)
+      return pages ? pages : 1
     },
     filteredKeys() {
       return this.keys.filter(key => key !== 'Name')

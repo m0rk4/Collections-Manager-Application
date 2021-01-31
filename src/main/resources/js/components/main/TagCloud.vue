@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="accent lighten-1">
-      Tags
+      {{$t('tags')}}
     </v-card-title>
     <v-card-text>
       <v-container fluid>

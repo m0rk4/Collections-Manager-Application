@@ -2,13 +2,15 @@
   <v-row class="ma-2">
     <v-col>
       <v-text-field
-          label="New comment"
-          placeholder="Type text..."
+          :label="$t('newComment')"
+          :placeholder="$t('newCommentPlaceHolder')"
           v-model="text"
           @keyup.enter="saveComment"
       ></v-text-field>
-      <v-btn @click="saveComment">
-        Add
+      <v-btn
+          rounded
+          @click="saveComment">
+        {{$t('add')}}
       </v-btn>
     </v-col>
   </v-row>

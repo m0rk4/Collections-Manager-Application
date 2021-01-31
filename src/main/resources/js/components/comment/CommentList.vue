@@ -4,7 +4,7 @@
         :value="false"
     >
       <template v-slot:activator>
-        <v-list-item-title>Comments</v-list-item-title>
+        <v-list-item-title>{{ $t('comments') }}</v-list-item-title>
       </template>
 
       <template

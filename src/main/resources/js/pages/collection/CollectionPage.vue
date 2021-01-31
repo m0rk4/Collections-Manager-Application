@@ -40,7 +40,7 @@
                   {{ currCollection.theme.text }}
                 </v-list-item-title>
                 <v-list-item-subtitle class="text-h6 font-weight-light mb-4">
-                  Author: <i>{{ currCollection.user.name }}</i>
+                  {{ $t('author') }}: <i>{{ currCollection.user.name }}</i>
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -49,7 +49,7 @@
             <v-container fluid>
               <v-list dense>
                 <v-list-item-title class="mb-4 text-h5 font-weight-medium">
-                  Description:
+                  {{ $t('description') }}:
                 </v-list-item-title>
                 <v-list-item>
                   <vue-markdown :source="currCollection.description"></vue-markdown>

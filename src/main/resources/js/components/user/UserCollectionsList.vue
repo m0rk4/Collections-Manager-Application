@@ -1,7 +1,7 @@
 <template>
   <v-card class="mb-8" >
     <v-toolbar flat class="accent lighten-1">
-      <v-toolbar-title>User collections</v-toolbar-title>
+      <v-toolbar-title>{{$t('userColls')}}</v-toolbar-title>
       <v-spacer></v-spacer>
       <collection-dialog
           v-if="currUser && (userId === currUser.id || isAdmin)"
@@ -11,7 +11,10 @@
     <v-card-text>
       <v-container fluid>
         <div class="scroller">
-          <div class="scroller-item mr-3 pa-2" v-for="c in userCollections" :key="c.id">
+          <div
+              class="scroller-item mr-3 pa-2"
+              v-for="c in userCollections"
+              :key="c.id">
             <div class="scroller-item-props">
               <v-card>
                 <v-avatar
@@ -35,7 +38,7 @@
                 <v-card-text class="mt-2">
                   <v-list>
                     <v-list-item-title>
-                      Theme:
+                      {{ $t('theme') }}:
                     </v-list-item-title>
                     <v-list-item-title class="font-weight-light">
                       {{ c.theme.text }}
@@ -49,7 +52,7 @@
                           text
                           rounded
                           @click="$store.dispatch('collection/deleteCollectionAction', c)"
-                      >Delete</v-btn>
+                      >{{ $t('delete') }}</v-btn>
                 </v-card-actions>
               </v-card>
             </div>

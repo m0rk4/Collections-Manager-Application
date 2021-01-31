@@ -4,7 +4,7 @@
       max-width="450px">
     <template v-slot:activator="{ on, attrs }">
       <v-btn v-if="$vuetify.breakpoint.mdAndUp" class="mx-2" rounded v-bind="attrs" v-on="on">
-        Login
+        {{$t('login')}}
       </v-btn>
       <v-btn v-else small class="mx-2" fab v-bind="attrs" v-on="on">
         <v-icon>

@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="accent lighten-1">
-      Last Added Items
+      {{$t('lastAddedItems')}}
     </v-card-title>
     <v-card-text>
       <main-item-list></main-item-list>

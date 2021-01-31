@@ -2,11 +2,8 @@
   <v-row>
     <v-col sm="12" md="6" xl="6" lg="6" cols="12">
       <span class="text-h1 text-left font-weight-light">
-        Results for "{{ query || tag }}":
+        {{ $t('resultsFor') }} "{{ query || tag }}":
       </span>
-      <div class="text-h1 text-left font-weight-light">
-        {{ items.length }} Items
-      </div>
     </v-col>
     <v-col>
       <v-card
@@ -16,7 +13,7 @@
         <v-list dense class="accent lighten-1">
           <v-subheader
               class="text-h4 font-weight-regular">
-            Search Results:
+            {{$t('searchResults')}}:
           </v-subheader>
           <v-list-item-group>
             <v-list-item
@@ -28,14 +25,14 @@
                 <v-list-item-title
                     class="text-h6 font-weight-light"
                 >
-                  <span class="font-weight-medium">Title:</span> {{ item.title }}
+                  <span class="font-weight-medium">{{$t('item')}}:</span> {{ item.title }}
                 </v-list-item-title>
               </v-list-item-content>
               <v-list-item-content v-if="$vuetify.breakpoint.mdAndUp">
                 <v-list-item-subtitle
                     class="text-h6 font-weight-light"
                 >
-                  <span class="font-weight-medium">Collection:</span> {{ item.collection.title }}
+                  <span class="font-weight-medium">{{$t('collection')}}:</span> {{ item.collection.title }}
                 </v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-avatar>

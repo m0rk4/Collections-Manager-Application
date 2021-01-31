@@ -80,6 +80,7 @@ export default {
         addNewItemAction({commit}, itemToAdd) {
             itemApi.addNewItem(itemToAdd).then(res => {
                 res.json().then(savedItem => {
+                    console.log(savedItem)
                     commit('addNewItemMutation', savedItem)
                     commit(
                         'tag/addTagsMutation',
